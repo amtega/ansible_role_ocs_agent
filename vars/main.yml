@@ -1,2 +1,13 @@
 ---
 # Role variables
+ocs_agent_repo_host: https://rpm.ocsinventory-ng.org
+ocs_agent_repo_host_path: ""
+
+ocs_agent_repo_file_CentOS_6: ocsinventory-release-latest.el6.ocs.noarch.rpm
+ocs_agent_repo_file_RedHat_6: ocsinventory-release-latest.el6.ocs.noarch.rpm
+ocs_agent_repo_file_CentOS_7: ocsinventory-release-latest.el7.ocs.noarch.rpm
+ocs_agent_repo_file_RedHat_7: ocsinventory-release-latest.el7.ocs.noarch.rpm
+ocs_agent_repo_file_Fedora_27: ocsinventory-release-latest.fc27.ocs.noarch.rpm
+ocs_agent_repo_file_Fedora_28: ocsinventory-release-latest.fc27.ocs.noarch.rpm
+
+ocs_agent_package_name: ocsinventory-agent

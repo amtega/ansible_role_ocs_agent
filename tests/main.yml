@@ -1,2 +1,6 @@
 ---
 # Tasks for testing role
+- name: test ocs_agent role
+  hosts: localhost
+  roles:
+    - amtega.ocs_agent

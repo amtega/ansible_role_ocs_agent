@@ -1,0 +1,17 @@
+---
+# install tasks
+- name: Install ocsinventory repository
+  package:
+    name: "{{ artifact_result.ocsinventory_repo.download_path }}"
+    state: present
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::install::repository
+
+- name: Install ocsinventory agent
+  package:
+    name: "{{ ocs_agent_package_name }}"
+    state: present
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::install::agent

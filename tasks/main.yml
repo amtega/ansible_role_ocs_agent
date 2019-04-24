@@ -1,2 +1,20 @@
 ---
 # Role tasks
+
+- name: Install ocsinventory agent
+  import_tasks: install.yml
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::install
+
+- name: Configure ocsinventory agent
+  import_tasks: configure.yml
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::configure
+
+- name: Cleanup role artifacts
+  import_tasks: cleanup.yml
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::cleanup

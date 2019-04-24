@@ -1,0 +1,7 @@
+---
+# configure tasks
+
+- name: Fill ocsinventory agent config file
+  template:
+    src: ocs_agent_config.j2
+    dest: "{{ ocs_agent_config_path }}"
