@@ -23,4 +23,6 @@
 - name: test ocs_agent role
   hosts: vagrant_sandbox_vms
   roles:
-    - amtega.ocs_agent
+    - role: amtega.ocs_agent
+  tags:
+    - idempotence
