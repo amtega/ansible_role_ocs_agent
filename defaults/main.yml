@@ -7,6 +7,6 @@ ocs_agent_role_use_proxy: no
 # Variables to fill config file
 ocs_agent_config_path: /etc/ocsinventory/ocsinventory-agent.cfg
 ocs_agent_remoteserver: ocsinventory-server.acme.org
-ocs_agent_tag: "{{ ansible_facts.ansible_hostname }}"
+ocs_agent_tag: "{{ ansible_facts.hostname }}"
 ocs_agent_logger: Stderr
 ocs_agent_logfile: /var/log/ocsinventory-agent/ocsinventory-agent.log

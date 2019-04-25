@@ -13,7 +13,7 @@ server = {{ ocs_agent_remoteserver }}
 local = /var/lib/ocsinventory-agent
 {% endif %}
 # Administrative TAG (optional, must be filed before first inventory)
-{{% if ocs_agent_tag is defined %}}
+{% if ocs_agent_tag is defined %}
 tag = {{ ocs_agent_tag }}
 {% endif %}
 
