@@ -1,1 +1,6 @@
 {{ ansible_managed | comment }}
+{{ ocs_agent_logrotate.logfiles }} {
+{% for option in ocs_agent_logrotate.options %}
+        {{ option }}
+{% endfor %}      
+}

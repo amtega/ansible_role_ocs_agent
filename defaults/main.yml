@@ -4,9 +4,24 @@
 ocs_agent_role_use_proxy: no
 
 
-# Variables to fill config file
+# Variables to fill config files
 ocs_agent_config_path: /etc/ocsinventory/ocsinventory-agent.cfg
+ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent.cfg
 ocs_agent_remoteserver: ocsinventory-server.acme.org
 ocs_agent_tag: "{{ ansible_facts.hostname }}"
 ocs_agent_logger: Stderr
 ocs_agent_logfile: /var/log/ocsinventory-agent/ocsinventory-agent.log
+#For sysconfig only. Values cron and none are permited.
+ocs_agent_mode: cron
+ocs_agent_pause: 100
+
+
+#Variable to fill logrotate config
+ocs_agent_logrotate:
+  logfiles: /var/log/ocsinventory-agent/*.log
+  options:
+    - daily
+    - rotate 7
+    - compress
+    - notifempty
+    - missingok

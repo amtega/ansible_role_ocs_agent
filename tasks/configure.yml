@@ -5,3 +5,22 @@
   template:
     src: ocs_agent_config.j2
     dest: "{{ ocs_agent_config_path }}"
+  tags:
+    - role::ocs_agent::configure
+    - role::ocs_agent::configure::config
+
+- name: Fill ocsinventory agent sysconfig file
+  template:
+    src: ocs_agent_sysconfig.j2
+    dest: "{{ ocs_agent_sysconfig_path }}"
+  tags:
+    - role::ocs_agent::configure
+    - role::ocs_agent::configure::sysconfig
+
+- name: Configure logrotate for ocsinventory agent logs
+  template:
+    src: ocs_agent_logrotate.j2
+    dest: "{{ ocs_agent_logrotate_path }}"
+  tags:
+    - role::ocs_agent::configure
+    - role::ocs_agent::configure::logrotate
