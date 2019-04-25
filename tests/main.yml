@@ -1,6 +1,26 @@
 ---
 # Tasks for testing role
-- name: test ocs_agent role
+- name: Configure vagrant sandbox environment
   hosts: localhost
+  roles:
+    - role: amtega.vagrant_presets
+      vagrant_presets_boxes_json_query: >-
+        [? starts_with(name, `centos-6`)
+           || starts_with(name, `centos-7`)
+           || starts_with(name, `fedora-27`)
+           || starts_with(name, `fedora-28`) ]
+  tags:
+    - sandbox
+
+- name: Run idempotence test
+  hosts: localhost
+  roles:
+    - role: amtega.vagrant_sandbox
+      vagrant_sandbox_state: started
+  tags:
+    - sandbox
+
+- name: test ocs_agent role
+  hosts: vagrant_sandbox_vms
   roles:
     - amtega.ocs_agent

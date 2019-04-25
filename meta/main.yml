@@ -47,3 +47,8 @@ dependencies:
           dest: /tmp
           validate_certs: false
           no_log: no
+
+  - role: amtega.packages
+    packages_os:
+      fedora:
+        all: "{{ ocs_agent_packages_fedora }}"

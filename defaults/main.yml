@@ -3,10 +3,13 @@
 # Define a proxy_client if is necesary
 ocs_agent_role_use_proxy: no
 
+#Packages witch fedora distributions need to install
+ocs_agent_packages_fedora:
+  perl-XML-Simple: present
 
 # Variables to fill config files
 ocs_agent_config_path: /etc/ocsinventory/ocsinventory-agent.cfg
-ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent.cfg
+ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
 ocs_agent_remoteserver: ocsinventory-server.acme.org
 ocs_agent_tag: "{{ ansible_facts.hostname }}"
 ocs_agent_logger: Stderr
@@ -17,6 +20,7 @@ ocs_agent_pause: 100
 
 
 #Variable to fill logrotate config
+ocs_agent_logrotate_path: /etc/logrotate.d/ocsinventory-agent
 ocs_agent_logrotate:
   logfiles: /var/log/ocsinventory-agent/*.log
   options:

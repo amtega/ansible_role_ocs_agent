@@ -12,7 +12,7 @@
 - name: Fill ocsinventory agent sysconfig file
   template:
     src: ocs_agent_sysconfig.j2
-    dest: "{{ ocs_agent_sysconfig_path }}"
+    dest: "{{ ocs_agent_syconfig_path }}"
   tags:
     - role::ocs_agent::configure
     - role::ocs_agent::configure::sysconfig
