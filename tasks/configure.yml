@@ -6,6 +6,7 @@
     src: ocs_agent_config.j2
     dest: "{{ ocs_agent_config_path }}"
   tags:
+    - role::ocs_agent
     - role::ocs_agent::configure
     - role::ocs_agent::configure::config
 
@@ -14,6 +15,7 @@
     src: ocs_agent_sysconfig.j2
     dest: "{{ ocs_agent_syconfig_path }}"
   tags:
+    - role::ocs_agent
     - role::ocs_agent::configure
     - role::ocs_agent::configure::sysconfig
 
@@ -22,5 +24,31 @@
     src: ocs_agent_logrotate.j2
     dest: "{{ ocs_agent_logrotate_path }}"
   tags:
+    - role::ocs_agent
     - role::ocs_agent::configure
     - role::ocs_agent::configure::logrotate
+
+- name: Check default cron file exist
+  stat:
+    path: "{{ ocs_agent_cron_default_path }}"
+  register: cron_file_stat
+  when:
+    - ocs_agent_mode is defined
+    - ocs_agent_mode == 'cron'
+    - ocs_agent_cron_frequency != 'daily'
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::configure
+    - role::ocs_agent::configure::cron
+
+- name: Establish the cron frequency for ocsinventory agent
+  command: mv "{{ ocs_agent_cron_default_path }}" /etc/cron."{{ ocs_agent_cron_frequency}}"
+  when:
+    - ocs_agent_mode is defined
+    - ocs_agent_mode == 'cron'
+    - ocs_agent_cron_frequency != 'daily'
+    - cron_file_stat.stat.exist
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::configure
+    - role::ocs_agent::configure::cron

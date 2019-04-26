@@ -1,28 +1,44 @@
 ---
 # Tasks for testing role
-- name: Configure vagrant sandbox environment
+- name: run idempotence test
   hosts: localhost
   roles:
-    - role: amtega.vagrant_presets
-      vagrant_presets_boxes_json_query: >-
+    - role: amtega.docker_presets
+      docker_presets_images_json_query: >-
         [? starts_with(name, `centos-6`)
            || starts_with(name, `centos-7`)
            || starts_with(name, `fedora-27`)
            || starts_with(name, `fedora-28`) ]
-  tags:
-    - sandbox
 
-- name: Run idempotence test
-  hosts: localhost
-  roles:
-    - role: amtega.vagrant_sandbox
-      vagrant_sandbox_state: started
+    - role: amtega.docker_sandbox
+      docker_sandbox_state: started
   tags:
     - sandbox
 
 - name: test ocs_agent role
-  hosts: vagrant_sandbox_vms
+  hosts: docker_sandbox_containers
   roles:
     - role: amtega.ocs_agent
+  tasks:
+    - name: check ocsinventory agent install
+      command: ocsinventory-agent --version
+      register: ocs_agent_check
+      changed_when: no
+      failed_when: not ocs_agent_check.stdout is search("Ocsinventory unified agent for UNIX")
+    - name: check cron file location is correct
+      stat:
+        path: /etc/cron."{{ ocs_agent_cron_frequency}}"/ocsinventory-agent
+      register: ocs_agent_cron_check
+      changed_when: no
+    
   tags:
     - idempotence
+
+- name: cleanup docker docker sandbox
+  hosts: localhost
+  roles:
+    - role: amtega.docker_sandbox
+      docker_sandbox_state: absent
+  tags:
+    - cleanup
+    - sandbox

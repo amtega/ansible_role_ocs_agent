@@ -29,24 +29,11 @@ dependencies:
   - role: amtega.proxy_client
     vars:
       proxy_client_permanent: no
-    when: ocs_agent_role_use_proxy
 
   - role: amtega.epel
     when:
       - ansible_facts.distribution == 'CentOS'
       - ansible_facts.distribution == 'RedHat'
-
-  - role: amtega.artifact
-    vars:
-      artifact_list:
-        - id: ocsinventory_repo
-          type: https
-          host: "{{ ocs_agent_repo_host }}"
-          path: "{{ ocs_agent_repo_host_path }}"
-          file: "{{ lookup('vars', 'ocs_agent_repo_file' + '_' + ansible_facts.distribution + '_'+ ansible_facts.distribution_major_version) }}"
-          dest: /tmp
-          validate_certs: false
-          no_log: no
 
   - role: amtega.packages
     packages_os:

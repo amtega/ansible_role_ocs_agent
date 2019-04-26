@@ -1,7 +1,5 @@
 ---
 # Role default lower priority variables
-# Define a proxy_client if is necesary
-ocs_agent_role_use_proxy: no
 
 #Packages witch fedora distributions need to install
 ocs_agent_packages_fedora:
@@ -29,3 +27,8 @@ ocs_agent_logrotate:
     - compress
     - notifempty
     - missingok
+
+#Define cron frequency. Values hourly, daily, weekly and monthly are permited.
+#Ocsinventory agent create a cron file in cron.hourly by default.
+ocs_agent_cron_frequency: daily
+ocs_agent_cron_default_path: /etc/cron.hourly/ocsinventory-agent

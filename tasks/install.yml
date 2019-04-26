@@ -1,11 +1,34 @@
 ---
 # install tasks
+
+- name: Check if ocsinventory repository is installed
+  stat:
+    path: /etc/yum.repos.d/ocsinventory.repo
+  register: ocs_agent_repo
+
+- name: Download ocsinventory repository rpm if it's not installed
+  include_role:
+    name: amtega.artifact
+  vars:
+    artifact_list:
+      - id: ocsinventory_repo
+        type: https
+        host: "{{ ocs_agent_repo_host }}"
+        path: "{{ ocs_agent_repo_host_path }}"
+        file: "{{ lookup('vars', 'ocs_agent_repo_file' + '_' + ansible_facts.distribution + '_'+ ansible_facts.distribution_major_version) }}"
+        dest: /tmp
+        validate_certs: false
+        no_log: no
+  when: not ocs_agent_repo.stat.exists
+
 - name: Install ocsinventory repository
   package:
     name: "{{ artifact_result.ocsinventory_repo.download_path }}"
     state: present
+  when: not ocs_agent_repo.stat.exists
   tags:
     - role::ocs_agent
+    - role::ocs_agent::install
     - role::ocs_agent::install::repository
 
 - name: Install ocsinventory agent
@@ -14,4 +37,5 @@
     state: present
   tags:
     - role::ocs_agent
+    - role::ocs_agent::install
     - role::ocs_agent::install::agent
