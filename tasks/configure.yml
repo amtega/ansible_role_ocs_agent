@@ -28,26 +28,22 @@
     - role::ocs_agent::configure
     - role::ocs_agent::configure::logrotate
 
-- name: Check default cron file exist
-  stat:
-    path: "{{ ocs_agent_cron_default_path }}"
-  register: cron_file_stat
-  when:
-    - ocs_agent_mode is defined
-    - ocs_agent_mode == 'cron'
-    - ocs_agent_cron_frequency != 'daily'
-  tags:
-    - role::ocs_agent
-    - role::ocs_agent::configure
-    - role::ocs_agent::configure::cron
+- block:
+    - name: Check default cron file exist
+      stat:
+        path: "{{ ocs_agent_cron_default_path }}"
+      register: cron_file_stat
+      when:
+        - ocs_agent_mode is defined
+        - ocs_agent_mode == 'cron'
 
-- name: Establish the cron frequency for ocsinventory agent
-  command: mv "{{ ocs_agent_cron_default_path }}" /etc/cron."{{ ocs_agent_cron_frequency}}"
-  when:
-    - ocs_agent_mode is defined
-    - ocs_agent_mode == 'cron'
-    - ocs_agent_cron_frequency != 'daily'
-    - cron_file_stat.stat.exist
+    - name: Establish the cron frequency for ocsinventory agent
+      command: mv "{{ ocs_agent_cron_default_path }}" /etc/cron."{{ ocs_agent_cron_frequency}}"/
+      when:
+        - ocs_agent_mode is defined
+        - ocs_agent_mode == 'cron'
+        - cron_file_stat.stat.exists
+        - ocs_agent_cron_frequency != ocs_agent_cron_default_frequency
   tags:
     - role::ocs_agent
     - role::ocs_agent::configure

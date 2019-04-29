@@ -31,4 +31,5 @@ ocs_agent_logrotate:
 #Define cron frequency. Values hourly, daily, weekly and monthly are permited.
 #Ocsinventory agent create a cron file in cron.hourly by default.
 ocs_agent_cron_frequency: daily
+ocs_agent_cron_default_frequency: hourly
 ocs_agent_cron_default_path: /etc/cron.hourly/ocsinventory-agent

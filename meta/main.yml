@@ -16,7 +16,7 @@ galaxy_info:
         - 28
   galaxy_tags:
     - kernel
-    - tuning
+    - ocsinventory
 
 dependencies:
   - role: amtega.check_platform
@@ -39,3 +39,6 @@ dependencies:
     packages_os:
       fedora:
         all: "{{ ocs_agent_packages_fedora }}"
+
+  - role: amtega.artifact
+    when: false
