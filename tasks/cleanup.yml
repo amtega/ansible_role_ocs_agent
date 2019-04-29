@@ -1,0 +1,24 @@
+---
+# Cleanup tasks
+- block:
+    - name: reload facts
+      setup:
+
+    - name: Remove unnecessary files after install
+      include_role:
+        name: amtega.artifact
+      vars:
+        artifact_list:
+          - id: ocsinventory_repo
+            type: https
+            host: "{{ ocs_agent_repo_host }}"
+            path: "{{ ocs_agent_repo_host_path }}"
+            file: "{{ lookup('vars', 'ocs_agent_repo_file' + '_' + ansible_facts.distribution + '_'+ ansible_facts.distribution_major_version) }}"
+            dest: /tmp
+            validate_certs: false
+            no_log: no
+            state: absent
+
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::cleanup

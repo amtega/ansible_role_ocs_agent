@@ -1,0 +1,22 @@
+{{ ansible_managed | comment }}
+
+#
+# OCS Inventory "Unix Unified Agent" Configuration File
+#
+# options used by cron job overides this (see /etc/sysconfig/ocsinventory-agent)
+#
+
+# Server URL, unconmment if needed
+{% if ocs_agent_remoteserver is defined %}
+server = {{ ocs_agent_remoteserver }}
+{% else %}
+local = /var/lib/ocsinventory-agent
+{% endif %}
+# Administrative TAG (optional, must be filed before first inventory)
+{% if ocs_agent_tag is defined %}
+tag = {{ ocs_agent_tag }}
+{% endif %}
+
+# How to log, can be File,Stderr,Syslog
+logger = {{ ocs_agent_logger }}
+logfile = {{ ocs_agent_logfile }}
