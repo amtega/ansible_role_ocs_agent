@@ -1,13 +1,45 @@
 ---
 # Role variables
-ocs_agent_repo_host: https://rpm.ocsinventory-ng.org
-ocs_agent_repo_host_path: ""
 
-ocs_agent_repo_file_CentOS_6: ocsinventory-release-latest.el6.ocs.noarch.rpm
-ocs_agent_repo_file_RedHat_6: ocsinventory-release-latest.el6.ocs.noarch.rpm
-ocs_agent_repo_file_CentOS_7: ocsinventory-release-latest.el7.ocs.noarch.rpm
-ocs_agent_repo_file_RedHat_7: ocsinventory-release-latest.el7.ocs.noarch.rpm
-ocs_agent_repo_file_Fedora_27: ocsinventory-release-latest.fc27.ocs.noarch.rpm
-ocs_agent_repo_file_Fedora_28: ocsinventory-release-latest.fc27.ocs.noarch.rpm
+# Packages to install
 
-ocs_agent_package_name: ocsinventory-agent
+ocs_agent_packages_os:
+  all:
+    all:
+      dmidecode: present
+      ipmitool: present
+      make: present
+      monitor-edid: present
+      pciutils: present
+      perl-ExtUtils-MakeMaker: present
+      perl-IO-Zlib: present
+      perl-LWP-Protocol-https: present
+      perl-MD5: present
+      perl-Net-IP: present
+      perl-Net-Netmask: present
+      perl-Net-Ping: present
+      perl-Net-SNMP: present
+      perl-Parse-EDID: present
+      perl-Proc-Daemon: present
+      perl-Proc-PID-File: present
+      perl-Tie-DataUUID: present
+      perl-XML-Simple: present
+
+# Config paths
+
+ocs_agent_config_dir: /etc/ocsinventory
+ocs_agent_config_path: "{{ ocs_agent_config_dir }}/ocsinventory-agent.cfg"
+ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
+
+# Offical repository settings
+
+ocs_agent_repo_host: https://github.com
+ocs_agent_repo_path: /OCSInventory-NG/UnixAgent/releases/download/v2.4.2
+
+#
+# ocs_agent_default_artifacts: >-
+#   {{ lookup("template", "artifacts.j2") | from_yaml }}
+
+# Default cron config
+
+ocs_agent_cron_default_path: /etc/cron.hourly/ocsinventory-agent

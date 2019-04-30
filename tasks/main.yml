@@ -8,13 +8,15 @@
     - role::ocs_agent
     - role::ocs_agent::install
 
+- fail:
+
 - name: Configure ocsinventory agent
   include_tasks: configure.yml
   tags:
     - role::ocs_agent
     - role::ocs_agent::configure
 
-- name: Cleanup role artifacts
+- name: Cleanup
   include_tasks: cleanup.yml
   tags:
     - role::ocs_agent

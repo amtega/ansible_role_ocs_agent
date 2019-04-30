@@ -1,0 +1,12 @@
+{% set ns = namespace(found=false) %}
+
+{% for k in artifact_result.keys() | list %}
+{% if k in ocs_agent_artifacts | map(attribute="id") | list %}
+{% set ns.found = true %}
+- {{ artifact_result[k].download_path }}
+{% endif %}
+{% endfor %}
+
+{% if not ns.found %}
+[]
+{% endif %}

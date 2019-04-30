@@ -1,50 +1,64 @@
 ---
-# configure tasks
-
-- name: Fill ocsinventory agent config file
-  template:
-    src: ocs_agent_config.j2
-    dest: "{{ ocs_agent_config_path }}"
-  tags:
-    - role::ocs_agent
-    - role::ocs_agent::configure
-    - role::ocs_agent::configure::config
-
-- name: Fill ocsinventory agent sysconfig file
-  template:
-    src: ocs_agent_sysconfig.j2
-    dest: "{{ ocs_agent_syconfig_path }}"
-  tags:
-    - role::ocs_agent
-    - role::ocs_agent::configure
-    - role::ocs_agent::configure::sysconfig
-
-- name: Configure logrotate for ocsinventory agent logs
-  template:
-    src: ocs_agent_logrotate.j2
-    dest: "{{ ocs_agent_logrotate_path }}"
-  tags:
-    - role::ocs_agent
-    - role::ocs_agent::configure
-    - role::ocs_agent::configure::logrotate
+# Configure tasks
 
 - block:
-    - name: Check default cron file exist
+    - name: Setup ocsinventory agent config file
+      template:
+        src: config.j2
+        dest: "{{ ocs_agent_config_path }}"
+
+    - name: Setup ocsinventory agent sysconfig file
+      template:
+        src: sysconfig.j2
+        dest: "{{ ocs_agent_syconfig_path }}"
+
+    - name: Configure ocsinventory logrotate
+      template:
+        src: logrotate.j2
+        dest: "{{ ocs_agent_logrotate_path }}"
+
+    - name: Check default cron file
       stat:
         path: "{{ ocs_agent_cron_default_path }}"
-      register: cron_file_stat
+      register: ocs_agent_check_cron_result
       when:
         - ocs_agent_mode is defined
-        - ocs_agent_mode == 'cron'
+        - ocs_agent_mode == "cron"
 
-    - name: Establish the cron frequency for ocsinventory agent
-      command: mv "{{ ocs_agent_cron_default_path }}" /etc/cron."{{ ocs_agent_cron_frequency}}"/
+    - name: Remove ocsinventory agent default cron
+      command: >-
+        mv {{ ocs_agent_cron_default_path }}
+        {{ ocs_agent_config_dir }}/cron
       when:
         - ocs_agent_mode is defined
         - ocs_agent_mode == 'cron'
-        - cron_file_stat.stat.exists
-        - ocs_agent_cron_frequency != ocs_agent_cron_default_frequency
+        - ocs_agent_check_cron_result.stat.exists
+
+    - name: Remove obsolete agent cron config
+      file:
+        path:
+        state: absent
+      loop: >-
+        {{ ocs_agent_cron_alternatives
+           | difference(["/etc/cron."
+                          + ocs_agent_cron_frequency
+                          + "/ocsinventory-agent" ]) }}
+      vars:
+        ocs_agent_cron_alternatives:
+          - /etc/cron.hourly/ocsinventory-agent
+          - /etc/cron.daily/ocsinventory-agent
+          - /etc/cron.weekly/ocsinventory-agent
+          - /etc/cron.montly/ocsinventory-agent
+
+    - name: Setup ocsinventory agent cron
+      copy:
+        src: "{{ ocs_agent_config_dir }}/cron"
+        dest: "/etc/cron.{{ ocs_agent_cron_frequency }}"
+        remote_src: yes
+        mode: 0755
+      when:
+        - ocs_agent_mode is defined
+        - ocs_agent_mode == 'cron'
   tags:
     - role::ocs_agent
     - role::ocs_agent::configure
-    - role::ocs_agent::configure::cron

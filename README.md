@@ -1,9 +1,6 @@
-# amtega.optimizations
+# Ansible ocs_agent role
 
-This is an [Ansible](http://www.ansible.com) role to install and configure the OCSinventory agent.
-- Install and configure the agent.
-- Configure the logrotate.d file.
-- Adjust frequency of the cron file if needed
+This is an [Ansible](http://www.ansible.com) role to install and configure OCS Inventory agent.
 
 ## Role Variables
 
@@ -19,7 +16,6 @@ This is an example playbook:
 - hosts: all
   roles:
     - amtega.ocs_agent
-
 ```
 
 ## Testing
@@ -35,7 +31,7 @@ $ ansible-playbook main.yml
 
 ## License
 
-Copyright (C) 2018 AMTEGA - Xunta de Galicia
+Copyright (C) 2019 AMTEGA - Xunta de Galicia
 
 This role is free software: you can redistribute it and/or modify it under the terms of:
 
