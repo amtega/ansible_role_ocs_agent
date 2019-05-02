@@ -1,3 +1,6 @@
+---
+# Role dependencies
+
 galaxy_info:
   role_name: ocs_agent
   author: José Enrique Mourón Regueira
@@ -14,9 +17,10 @@ galaxy_info:
       versions:
         - 27
         - 28
+        - 29
   galaxy_tags:
-    - kernel
     - ocsinventory
+    - client
 
 dependencies:
   - role: amtega.check_platform
@@ -25,20 +29,31 @@ dependencies:
         centos: 6
         fedora: 27
         rhel: 6
+    tags:
+      - role::ocs_agent
 
   - role: amtega.proxy_client
     vars:
       proxy_client_permanent: no
+    tags:
+      - role::ocs_agent
+      - role::ocs_agent::install
 
   - role: amtega.epel
     when:
-      - ansible_facts.distribution == 'CentOS'
-      - ansible_facts.distribution == 'RedHat'
+      - ansible_facts.distribution | lower in ["centos", "redhat"]
+    tags:
+      - role::ocs_agent
+      - role::ocs_agent::install
 
   - role: amtega.packages
-    packages_os:
-      fedora:
-        all: "{{ ocs_agent_packages_fedora }}"
+    packages_os: "{{ ocs_agent_packages_os }}"
+    tags:
+      - role::ocs_agent
+      - role::ocs_agent::install
 
   - role: amtega.artifact
     when: false
+    tags:
+      - role::ocs_agent
+      - role::ocs_agent::install

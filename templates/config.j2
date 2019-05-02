@@ -1,0 +1,12 @@
+{{ ansible_managed | comment }}
+
+{% if ocs_agent_server is defined %}
+server = {{ ocs_agent_server }}
+{% else %}
+local = /var/lib/ocsinventory-agent
+{% endif %}
+{% if ocs_agent_tag is defined %}
+tag = {{ ocs_agent_tag }}
+{% endif %}
+logger = {{ ocs_agent_logger }}
+logfile = {{ ocs_agent_logfile }}

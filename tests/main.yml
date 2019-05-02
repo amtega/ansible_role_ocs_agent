@@ -1,6 +1,7 @@
 ---
 # Tasks for testing role
-- name: run idempotence test
+
+- name: Run idempotence test
   hosts: localhost
   roles:
     - role: amtega.docker_presets
@@ -8,43 +9,48 @@
         [? starts_with(name, `centos-6`)
            || starts_with(name, `centos-7`)
            || starts_with(name, `fedora-27`)
-           || starts_with(name, `fedora-28`) ]
+           || starts_with(name, `fedora-28`)
+           || starts_with(name, `fedora-29`) ]
 
     - role: amtega.docker_sandbox
       docker_sandbox_state: started
   tags:
     - sandbox
 
-- name: test ocs_agent role
+- name: Test ocs_agent role
   hosts: docker_sandbox_containers
   roles:
     - role: amtega.ocs_agent
   tasks:
-    - name: check ocsinventory agent install
+    - name: Check ocsinventory agent install
       command: ocsinventory-agent --version
       register: ocs_agent_check
       changed_when: no
-      failed_when: not ocs_agent_check.stdout is search("Ocsinventory unified agent for UNIX")
-    - name: check cron file location is correct
+      failed_when: >-
+        not ocs_agent_check.stdout
+        is search("Ocsinventory unified agent for UNIX")
+
+    - name: Check cron file location is correct
       stat:
-        path: "/etc/cron.{{ ocs_agent_cron_frequency}}/ocsinventory-agent"
+        path: "/etc/cron.{{ ocs_agent_cron_frequency }}/ocsinventory-agent"
       register: ocs_agent_cron_check
       changed_when: no
-    - name: check logrotate file location is correct
+
+    - name: Check logrotate file location is correct
       stat:
         path: "{{ ocs_agent_logrotate_path }}"
       register: ocs_agent_logrotate_check
       changed_when: no
-    - name: check install
+
+    - name: Check install
       assert:
         that:
           - ocs_agent_cron_check.stat.exists
           - ocs_agent_logrotate_check.stat.exists
-
   tags:
     - idempotence
 
-- name: cleanup docker docker sandbox
+- name: Cleanup docker docker sandbox
   hosts: localhost
   roles:
     - role: amtega.docker_sandbox

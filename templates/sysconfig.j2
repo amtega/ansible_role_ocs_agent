@@ -1,0 +1,9 @@
+{{ ansible_managed | comment }}
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+OCSMODE[0]=cron
+{% if ocs_agent_server is defined %}
+OCSSERVER[0]={{ ocs_agent_server }}
+{% endif %}
+OCSPAUSE[0]={{ ocs_agent_pause }}
+OCSTAG[0]={{ ocs_agent_tag }}

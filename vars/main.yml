@@ -1,13 +1,114 @@
 ---
 # Role variables
-ocs_agent_repo_host: https://rpm.ocsinventory-ng.org
-ocs_agent_repo_host_path: ""
 
-ocs_agent_repo_file_CentOS_6: ocsinventory-release-latest.el6.ocs.noarch.rpm
-ocs_agent_repo_file_RedHat_6: ocsinventory-release-latest.el6.ocs.noarch.rpm
-ocs_agent_repo_file_CentOS_7: ocsinventory-release-latest.el7.ocs.noarch.rpm
-ocs_agent_repo_file_RedHat_7: ocsinventory-release-latest.el7.ocs.noarch.rpm
-ocs_agent_repo_file_Fedora_27: ocsinventory-release-latest.fc27.ocs.noarch.rpm
-ocs_agent_repo_file_Fedora_28: ocsinventory-release-latest.fc27.ocs.noarch.rpm
+# Packages to install
 
-ocs_agent_package_name: ocsinventory-agent
+ocs_agent_packages_os:
+  all:
+    all:
+      dmidecode: present
+      ipmitool: present
+      make: present
+      pciutils: present
+      perl-libwww-perl: present
+      perl-Crypt-SSLeay: present
+      perl-IO-Socket-SSL: present
+      perl-Module-Install: present
+      perl-Net-CUPS: present
+      perl-Net-IP: present
+      perl-Net-Netmask: present
+      perl-Net-SNMP: present
+      perl-Net-SSLeay: present
+      perl-Nmap-Parser: present
+      perl-Proc-Daemon: present
+      perl-Proc-PID-File: present
+      perl-XML-Simple: present
+      perl-Ocsinventory-Agent: absent
+      ocsinventory-agent: absent
+      rsync: present
+  centos:
+    6:
+      uuid-perl: present
+      perl-Compress-Zlib: present
+      perl-MD5: present
+    7:
+      perl-Data-UUID: present
+      perl-Digest-MD5: present
+      perl-IO-Compress: present
+      perl-IO-Zlib: present
+      perl-LWP-Protocol-https: present
+      perl-Parse-EDID: present
+  fedora:
+    all:
+      perl-Data-UUID: present
+      perl-Digest-MD5: present
+      perl-IO-Compress: present
+      perl-IO-Zlib: present
+      perl-LWP-Protocol-https: present
+      perl-Parse-EDID: present
+  rhel:
+    6:
+      uuid-perl: present
+      perl-Compress-Zlib: present
+      perl-MD5: present
+    7:
+      perl-Data-UUID: present
+      perl-Digest-MD5: present
+      perl-IO-Compress: present
+      perl-IO-Zlib: present
+      perl-LWP-Protocol-https: present
+      perl-Parse-EDID: present
+
+# Config paths
+
+ocs_agent_config_dir: /etc/ocsinventory-agent
+ocs_agent_config_path: "{{ ocs_agent_config_dir }}/ocsinventory-agent.cfg"
+ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
+
+# Version to install
+
+ocs_agent_version_to_install: >-
+  {{ ocs_agent_version | default(ocs_agent_repo_last_release) }}
+
+# Offical repository settings
+
+ocs_agent_repo_host: https://github.com
+ocs_agent_repo_releases: /OCSInventory-NG/UnixAgent/releases
+
+ocs_agent_repo_last_release: >-
+  {{ (ocs_agent_get_releases_result.content.split('<div class="release')
+      | select("search", "label-latest")
+      | list
+      | first).splitlines()
+     | select("search", 'title="v.*"')
+     | list
+     | first
+     | regex_replace('.*title="v(.*)".*', '\1') }}
+
+ocs_agent_repo_path: >-
+  {{ "/OCSInventory-NG/UnixAgent/releases/download/v"
+     + ocs_agent_version_to_install }}
+
+# String to search to guess if ocsinventory agent is installed
+
+ocs_agent_installed_string: Ocsinventory unified agent for UNIX
+
+# Artifact variables
+
+ocs_agent_default_artifact:
+  type: https
+  host: "{{ ocs_agent_repo_host }}"
+  path: "{{ ocs_agent_repo_path }}"
+  file: >-
+    Ocsinventory-Unix-Agent-{{ ocs_agent_version_to_install }}.tar.gz
+  dest: /tmp
+  no_log: no
+
+ocs_agent_artifact_overrides:
+  id: ocsinventory_agent
+  unarchive: yes
+
+ocs_agent_artifact_overriden: >-
+  {{ ocs_agent_artifact
+     | default(ocs_agent_default_artifact)
+     | combine(ocs_agent_artifact_overrides) }}

@@ -1,24 +1,37 @@
 ---
 # Role default lower priority variables
 
-#Packages witch fedora distributions need to install
-ocs_agent_packages_fedora:
-  perl-XML-Simple: present
+# OCS Agent version. If not defined the role will take the last version
+# available in official repository
 
-# Variables to fill config files
-ocs_agent_config_path: /etc/ocsinventory/ocsinventory-agent.cfg
-ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
-ocs_agent_remoteserver: ocsinventory-server.acme.org
+#ocs_agent_version:
+
+# OCS Server
+
+ocs_agent_server: ocsinventory-server.acme.org
+
+# OCS tag
+
 ocs_agent_tag: "{{ ansible_facts.hostname }}"
+
+# OCS logger
+
 ocs_agent_logger: Stderr
+
+# OCS agent log file
+
 ocs_agent_logfile: /var/log/ocsinventory-agent/ocsinventory-agent.log
-#For sysconfig only. Values cron and none are permited.
-ocs_agent_mode: cron
+
+# OCS agent pause before inventory
+
 ocs_agent_pause: 100
 
+# OCS agent logrotate config file
 
-#Variable to fill logrotate config
 ocs_agent_logrotate_path: /etc/logrotate.d/ocsinventory-agent
+
+# OCS agent logrotate config
+
 ocs_agent_logrotate:
   logfiles: /var/log/ocsinventory-agent/*.log
   options:
@@ -28,8 +41,22 @@ ocs_agent_logrotate:
     - notifempty
     - missingok
 
-#Define cron frequency. Values hourly, daily, weekly and monthly are permited.
-#Ocsinventory agent create a cron file in cron.hourly by default.
+# OCS agent cron frequency. Can be hourly, daily, weekly or monthly
+
 ocs_agent_cron_frequency: daily
-ocs_agent_cron_default_frequency: hourly
-ocs_agent_cron_default_path: /etc/cron.hourly/ocsinventory-agent
+
+# Artifact download config
+#
+# The role will try to identify the OCS inventory agent artifact to download
+# from the the official site.
+#
+# If you want to download the artifact from another repository yo need to
+# configure the `ocs_agent_artifact` variable to point to a local/public
+# repository that contains the required artifact
+#
+# Take a look to `amtega.artifact` role documentation to known about supported
+# types of artifacts, their specific settings and how to configure a proxy if
+# necessary. The attributes `id`, `unarchive` of the artifact will be overriden,
+# so they are not mandatory
+
+# ocs_agent_artifact:
