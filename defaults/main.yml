@@ -1,10 +1,10 @@
 ---
 # Role default lower priority variables
 
-# OCS Agent version. Default is to take the last version available in official
-# repository
+# OCS Agent version. If not defined the role will take the last version
+# available in official repository
 
-ocs_agent_version: "{{ ocs_agent_repo_last_release }}"
+#ocs_agent_version:
 
 # OCS Server
 
@@ -59,10 +59,4 @@ ocs_agent_cron_frequency: daily
 # necessary. The attributes `id`, `unarchive` of the artifact will be overriden,
 # so they are not mandatory
 
-ocs_agent_artifact:
-  type: https
-  host: "{{ ocs_agent_repo_host }}"
-  path: "{{ ocs_agent_repo_path }}"
-  file: "Ocsinventory-Unix-Agent-{{ ocs_agent_version }}.tar.gz"
-  dest: /tmp
-  no_log: no
+# ocs_agent_artifact:

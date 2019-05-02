@@ -23,6 +23,8 @@ ocs_agent_packages_os:
       perl-Proc-Daemon: present
       perl-Proc-PID-File: present
       perl-XML-Simple: present
+      perl-Ocsinventory-Agent: absent
+      ocsinventory-agent: absent
       rsync: present
   centos:
     6:
@@ -63,16 +65,18 @@ ocs_agent_config_dir: /etc/ocsinventory-agent
 ocs_agent_config_path: "{{ ocs_agent_config_dir }}/ocsinventory-agent.cfg"
 ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
 
+# Version to install
+
+ocs_agent_version_to_install: >-
+  {{ ocs_agent_version | default(ocs_agent_repo_last_release) }}
+
 # Offical repository settings
 
 ocs_agent_repo_host: https://github.com
 ocs_agent_repo_releases: /OCSInventory-NG/UnixAgent/releases
 
 ocs_agent_repo_last_release: >-
-  {{ (lookup("url",
-             ocs_agent_repo_host
-             + ocs_agent_repo_releases,
-             split_lines=false).split('<div class="release')
+  {{ (ocs_agent_get_releases_result.content.split('<div class="release')
       | select("search", "label-latest")
       | list
       | first).splitlines()
@@ -82,7 +86,8 @@ ocs_agent_repo_last_release: >-
      | regex_replace('.*title="v(.*)".*', '\1') }}
 
 ocs_agent_repo_path: >-
-  /OCSInventory-NG/UnixAgent/releases/download/v{{ ocs_agent_version }}
+  {{ "/OCSInventory-NG/UnixAgent/releases/download/v"
+     + ocs_agent_version_to_install }}
 
 # String to search to guess if ocsinventory agent is installed
 
@@ -90,9 +95,20 @@ ocs_agent_installed_string: Ocsinventory unified agent for UNIX
 
 # Artifact variables
 
+ocs_agent_default_artifact:
+  type: https
+  host: "{{ ocs_agent_repo_host }}"
+  path: "{{ ocs_agent_repo_path }}"
+  file: >-
+    Ocsinventory-Unix-Agent-{{ ocs_agent_version_to_install }}.tar.gz
+  dest: /tmp
+  no_log: no
+
 ocs_agent_artifact_overrides:
   id: ocsinventory_agent
   unarchive: yes
 
 ocs_agent_artifact_overriden: >-
-  {{ ocs_agent_artifact | combine(ocs_agent_artifact_overrides) }}
+  {{ ocs_agent_artifact
+     | default(ocs_agent_default_artifact)
+     | combine(ocs_agent_artifact_overrides) }}
