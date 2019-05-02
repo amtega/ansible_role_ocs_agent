@@ -17,32 +17,17 @@
         src: logrotate.j2
         dest: "{{ ocs_agent_logrotate_path }}"
 
-    - name: Check default cron file
-      stat:
-        path: "{{ ocs_agent_cron_default_path }}"
-      register: ocs_agent_check_cron_result
-      when:
-        - ocs_agent_mode is defined
-        - ocs_agent_mode == "cron"
-
-    - name: Remove ocsinventory agent default cron
-      command: >-
-        mv {{ ocs_agent_cron_default_path }}
-        {{ ocs_agent_config_dir }}/cron
-      when:
-        - ocs_agent_mode is defined
-        - ocs_agent_mode == 'cron'
-        - ocs_agent_check_cron_result.stat.exists
-
     - name: Remove obsolete agent cron config
       file:
-        path:
+        path: "{{ ocs_agent_cron_file }}"
         state: absent
       loop: >-
         {{ ocs_agent_cron_alternatives
            | difference(["/etc/cron."
                           + ocs_agent_cron_frequency
                           + "/ocsinventory-agent" ]) }}
+      loop_control:
+        loop_var: ocs_agent_cron_file
       vars:
         ocs_agent_cron_alternatives:
           - /etc/cron.hourly/ocsinventory-agent
@@ -53,12 +38,9 @@
     - name: Setup ocsinventory agent cron
       copy:
         src: "{{ ocs_agent_config_dir }}/cron"
-        dest: "/etc/cron.{{ ocs_agent_cron_frequency }}"
+        dest: "/etc/cron.{{ ocs_agent_cron_frequency }}/ocsinventory-agent"
         remote_src: yes
         mode: 0755
-      when:
-        - ocs_agent_mode is defined
-        - ocs_agent_mode == 'cron'
   tags:
     - role::ocs_agent
     - role::ocs_agent::configure

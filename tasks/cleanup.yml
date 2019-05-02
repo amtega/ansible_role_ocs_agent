@@ -12,7 +12,7 @@
         name: amtega.artifact
       vars:
         artifact_list:
-          - "{{ ocs_agent_artifact | combine({'state': 'absent'}) }}"
+          - "{{ ocs_agent_artifact_overriden | combine({'state': 'absent'}) }}"
   tags:
     - role::ocs_agent
     - role::ocs_agent::cleanup

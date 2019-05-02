@@ -1,9 +1,10 @@
 ---
 # Role default lower priority variables
 
-# OCS Agent version
+# OCS Agent version. Default is to take the last version available in official
+# repository
 
-ocs_agent_version: 2.4.2
+ocs_agent_version: "{{ ocs_agent_repo_last_release }}"
 
 # OCS Server
 
@@ -20,10 +21,6 @@ ocs_agent_logger: Stderr
 # OCS agent log file
 
 ocs_agent_logfile: /var/log/ocsinventory-agent/ocsinventory-agent.log
-
-# OCS agent mode
-
-ocs_agent_mode: cron
 
 # OCS agent pause before inventory
 

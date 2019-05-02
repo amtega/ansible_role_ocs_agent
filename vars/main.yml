@@ -9,37 +9,90 @@ ocs_agent_packages_os:
       dmidecode: present
       ipmitool: present
       make: present
-      monitor-edid: present
       pciutils: present
-      perl-ExtUtils-MakeMaker: present
-      perl-IO-Zlib: present
-      perl-LWP-Protocol-https: present
-      perl-MD5: present
+      perl-libwww-perl: present
+      perl-Crypt-SSLeay: present
+      perl-IO-Socket-SSL: present
+      perl-Module-Install: present
+      perl-Net-CUPS: present
       perl-Net-IP: present
       perl-Net-Netmask: present
-      perl-Net-Ping: present
       perl-Net-SNMP: present
-      perl-Parse-EDID: present
+      perl-Net-SSLeay: present
+      perl-Nmap-Parser: present
       perl-Proc-Daemon: present
       perl-Proc-PID-File: present
-      perl-Tie-DataUUID: present
       perl-XML-Simple: present
+      rsync: present
+  centos:
+    6:
+      uuid-perl: present
+      perl-Compress-Zlib: present
+      perl-MD5: present
+    7:
+      perl-Data-UUID: present
+      perl-Digest-MD5: present
+      perl-IO-Compress: present
+      perl-IO-Zlib: present
+      perl-LWP-Protocol-https: present
+      perl-Parse-EDID: present
+  fedora:
+    all:
+      perl-Data-UUID: present
+      perl-Digest-MD5: present
+      perl-IO-Compress: present
+      perl-IO-Zlib: present
+      perl-LWP-Protocol-https: present
+      perl-Parse-EDID: present
+  rhel:
+    6:
+      uuid-perl: present
+      perl-Compress-Zlib: present
+      perl-MD5: present
+    7:
+      perl-Data-UUID: present
+      perl-Digest-MD5: present
+      perl-IO-Compress: present
+      perl-IO-Zlib: present
+      perl-LWP-Protocol-https: present
+      perl-Parse-EDID: present
 
 # Config paths
 
-ocs_agent_config_dir: /etc/ocsinventory
+ocs_agent_config_dir: /etc/ocsinventory-agent
 ocs_agent_config_path: "{{ ocs_agent_config_dir }}/ocsinventory-agent.cfg"
 ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
 
 # Offical repository settings
 
 ocs_agent_repo_host: https://github.com
-ocs_agent_repo_path: /OCSInventory-NG/UnixAgent/releases/download/v2.4.2
+ocs_agent_repo_releases: /OCSInventory-NG/UnixAgent/releases
 
-#
-# ocs_agent_default_artifacts: >-
-#   {{ lookup("template", "artifacts.j2") | from_yaml }}
+ocs_agent_repo_last_release: >-
+  {{ (lookup("url",
+             ocs_agent_repo_host
+             + ocs_agent_repo_releases,
+             split_lines=false).split('<div class="release')
+      | select("search", "label-latest")
+      | list
+      | first).splitlines()
+     | select("search", 'title="v.*"')
+     | list
+     | first
+     | regex_replace('.*title="v(.*)".*', '\1') }}
 
-# Default cron config
+ocs_agent_repo_path: >-
+  /OCSInventory-NG/UnixAgent/releases/download/v{{ ocs_agent_version }}
 
-ocs_agent_cron_default_path: /etc/cron.hourly/ocsinventory-agent
+# String to search to guess if ocsinventory agent is installed
+
+ocs_agent_installed_string: Ocsinventory unified agent for UNIX
+
+# Artifact variables
+
+ocs_agent_artifact_overrides:
+  id: ocsinventory_agent
+  unarchive: yes
+
+ocs_agent_artifact_overriden: >-
+  {{ ocs_agent_artifact | combine(ocs_agent_artifact_overrides) }}

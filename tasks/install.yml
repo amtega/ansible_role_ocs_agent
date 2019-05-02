@@ -2,27 +2,6 @@
 # install tasks
 
 - block:
-    # - name: Check ocsinventory repository
-    #   stat:
-    #     path: /etc/yum.repos.d/ocsinventory.repo
-    #   register: ocs_agent_repo_check_result
-
-    # - name: Download ocsinventory repository rpm
-    #   include_role:
-    #     name: amtega.artifact
-    #   vars:
-    #     artifact_list:
-    #       - "{{ ocs_agent_artifact }}"
-    #   when: not ocs_agent_repo_check_result.stat.exists
-    #
-    # - name: Setup ocsinventory repository
-    #   package:
-    #     name: "{{ artifact_result.ocsinventory_repo.download_path }}"
-    #     state: present
-    #   when: not ocs_agent_repo_check_result.stat.exists
-    #
-
-
     - name: Check ocsinventory
       command: ocsinventory-agent --version
       register: ocs_agent_check_result
@@ -34,37 +13,44 @@
           include_role:
             name: amtega.artifact
           vars:
-            artifact_overrides:
-              id: ocsinventory_agent
-              unarchive: yes
-            artifact_overriden: >-
-              {{ ocs_agent_artifact | combine(artifact_overrides) }}
-            artifact_list: "{{ [ artifact_overriden ] }}"
+            artifact_list:
+              - "{{ ocs_agent_artifact_overriden }}"
 
         - name: Prepare ocsinventory agent build
-          shell: PERL_AUTOINSTALL=1 perl Makefile.PL
+          shell: perl Makefile.PL INSTALLDIRS=vendor
           args:
-            chdir: /tmp/Ocsinventory-Unix-Agent-2.4.2
+            chdir: "{{ ocs_agent_build_dir }}"
             warn: no
 
         - name: Build ocsinventory build
           command: make
           args:
-            chdir: /tmp/Ocsinventory-Unix-Agent-2.4.2
+            chdir: "{{ ocs_agent_build_dir }}"
 
         - name: Install ocsinventory
-          command: make install
+          command: make pure_install
           args:
-            chdir: /tmp/Ocsinventory-Unix-Agent-2.4.2
+            chdir: "{{ ocs_agent_build_dir }}"
 
-    #
-    #     - name: Install ocsinventory agent packages
-    #       package:
-    #         name: "{{ lookup('template', 'packages.j2') | from_yaml }}"
-    #         state: present
-      when: >-
-        not ocs_agent_check_result.stdout | default("")
-        is search("Ocsinventory unified agent for UNIX")
+        - name: Install ocsinventory agent config directory
+          synchronize:
+            src: "{{ ocs_agent_build_dir }}/etc/ocsinventory-agent"
+            dest: "{{ ocs_agent_config_dir }}"
+          delegate_to: "{{ inventory_hostname }}"
+
+        - name: Install ocsinventory template cron file
+          copy:
+            src: "{{ ocs_agent_build_dir }}/etc/cron.d/ocsinventory-agent"
+            dest: "{{ ocs_agent_config_dir }}/cron"
+            remote_src: yes
+      when: ocs_agent_installed_version != ocs_agent_version
+      vars:
+        ocs_agent_installed_version: >-
+          {{ ocs_agent_check_result.stdout
+             | default("")
+             | regex_replace(".*\((.*)\)", "\1") }}
+        ocs_agent_build_dir: >-
+          /tmp/Ocsinventory-Unix-Agent-{{ ocs_agent_version }}
   tags:
     - role::ocs_agent
     - role::ocs_agent::install

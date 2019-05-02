@@ -8,8 +8,6 @@
     - role::ocs_agent
     - role::ocs_agent::install
 
-- fail:
-
 - name: Configure ocsinventory agent
   include_tasks: configure.yml
   tags:
