@@ -3,7 +3,7 @@
 
 galaxy_info:
   role_name: ocs_agent
-  author: José Enrique Mourón Regueira
+  author: José Enrique Mourón Regueira / Juan Antonio Valiño García
   description: Install and configure ocsinventory agent
   company: AMTEGA - Xunta de Galicia
   license: GPLv3 or EUPL
