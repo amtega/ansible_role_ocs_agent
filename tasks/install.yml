@@ -13,7 +13,9 @@
         url: "{{ ocs_agent_repo_host + ocs_agent_repo_releases }}"
         return_content: yes
       register: ocs_agent_get_releases_result
-      when: ocs_agent_version is not defined
+      when:
+        - ocs_agent_version is not defined
+        - ocs_agent_artifact is not defined
 
     - block:
         - name: Download ocsinventory artifacts
