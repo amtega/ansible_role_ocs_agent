@@ -68,23 +68,12 @@ ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
 # Version to install
 
 ocs_agent_version_to_install: >-
-  {{ ocs_agent_version | default(ocs_agent_repo_last_release) }}
+  {{ (lookup('template', 'version.yml.j2') | from_yaml).version }}
 
 # Offical repository settings
 
 ocs_agent_repo_host: https://github.com
 ocs_agent_repo_releases: /OCSInventory-NG/UnixAgent/releases
-
-ocs_agent_repo_last_release: >-
-  {{ (ocs_agent_get_releases_result.content.split('<div class="release')
-      | select("search", "label-latest")
-      | list
-      | first).splitlines()
-     | select("search", 'title="v.*"')
-     | list
-     | first
-     | regex_replace('.*title="v(.*)".*', '\1') }}
-
 ocs_agent_repo_path: >-
   {{ "/OCSInventory-NG/UnixAgent/releases/download/v"
      + ocs_agent_version_to_install }}
