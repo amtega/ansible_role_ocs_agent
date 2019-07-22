@@ -1,8 +1,9 @@
 ---
 # Role tasks
 
-- name: Install ocsinventory agent
-  include_tasks: install.yml
+- block:
+    - name: Install ocsinventory agent
+      include_tasks: install.yml
   environment: "{{ proxy_client_environment }}"
   tags:
     - role::ocs_agent
