@@ -6,6 +6,7 @@
 ocs_agent_packages_os:
   all:
     all:
+      crontabs: present
       dmidecode: present
       ipmitool: present
       make: present
@@ -26,6 +27,7 @@ ocs_agent_packages_os:
       perl-Ocsinventory-Agent: absent
       ocsinventory-agent: absent
       rsync: present
+      sshpass: present
   centos:
     6:
       uuid-perl: present

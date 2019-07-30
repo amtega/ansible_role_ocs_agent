@@ -14,9 +14,3 @@
   tags:
     - role::ocs_agent
     - role::ocs_agent::configure
-
-- name: Cleanup
-  include_tasks: cleanup.yml
-  tags:
-    - role::ocs_agent
-    - role::ocs_agent::cleanup
