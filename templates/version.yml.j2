@@ -6,7 +6,7 @@
                  | select("search", 'title="v.*"')
                  | list
                  | first
-                 | regex_replace('.*title="v(.*)".*', '\1') %}
+                 | regex_replace('.*title="v(.*)".*', '\\1') %}
 {%- else %}
 {%- set latest = "" -%}
 {%- endif %}

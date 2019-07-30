@@ -42,16 +42,25 @@
             chdir: "{{ ocs_agent_build_dir }}"
 
         - name: Install ocsinventory agent config directory
-          synchronize:
-            src: "{{ ocs_agent_build_dir }}/etc/ocsinventory-agent"
-            dest: "{{ ocs_agent_config_dir }}"
-          delegate_to: "{{ inventory_hostname }}"
+          command: >-
+            rsync --delay-updates -F --compress --perms --owner --group \
+            --recursive --links --update '--out-format=<<CHANGED>>%i %n%L' \
+            {{ ocs_agent_build_dir }}/etc/ocsinventory-agent/
+            {{ ocs_agent_config_dir }}
+          register: ocs_agent_install_config_dir_result
+          changed_when: >-
+            ocs_agent_install_config_dir_result.stdout_lines | length > 0
 
         - name: Install ocsinventory template cron file
           copy:
             src: "{{ ocs_agent_build_dir }}/etc/cron.d/ocsinventory-agent"
             dest: "{{ ocs_agent_config_dir }}/cron"
             remote_src: yes
+
+        - name: Cleanup
+          include_tasks: cleanup.yml
+          tags:
+            - role::ocs_agent::cleanup
       when: ocs_agent_installed_version != ocs_agent_version_to_install
       vars:
         ocs_agent_installed_version: >-
