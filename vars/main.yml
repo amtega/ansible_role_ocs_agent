@@ -98,7 +98,6 @@ ocs_agent_default_artifact:
 ocs_agent_artifact_overrides:
   id: ocsinventory_agent
   unarchive: yes
-  no_log: no
 
 ocs_agent_artifact_overriden: >-
   {{ ocs_agent_artifact
