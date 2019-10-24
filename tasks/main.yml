@@ -1,9 +1,37 @@
 ---
 # Role tasks
 
+- include_role:
+    name: amtega.check_platform
+  vars:
+    check_platform_distributions:
+      centos: 6
+      fedora: 29
+      rhel: 6
+
+- include_role:
+    name: amtega.proxy_client
+  vars:
+    proxy_client_permanent: no
+
+- include_role:
+    name: amtega.epel
+
+- include_role:
+    name: amtega.packages
+  vars:
+    packages_os: "{{ ocs_agent_packages_os }}"
+
+- name: Gather ocsinventory facts
+  include_tasks: facts.yml
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::facts
+
 - block:
     - name: Install ocsinventory agent
       include_tasks: install.yml
+      when: ocs_agent_installed_version != ocs_agent_version_to_install
   environment: "{{ proxy_client_environment }}"
   tags:
     - role::ocs_agent

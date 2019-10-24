@@ -7,7 +7,7 @@ galaxy_info:
   description: Install and configure ocsinventory agent
   company: AMTEGA - Xunta de Galicia
   license: GPLv3 or EUPL
-  min_ansible_version: 2.7
+  min_ansible_version: 2.8
   platforms:
     - name: EL
       versions:
@@ -23,36 +23,21 @@ galaxy_info:
 
 dependencies:
   - role: amtega.check_platform
-    vars:
-      check_platform_distributions:
-        centos: 6
-        fedora: 29
-        rhel: 6
     tags:
-      - role::ocs_agent
+      - never
 
   - role: amtega.proxy_client
-    vars:
-      proxy_client_permanent: no
     tags:
-      - role::ocs_agent
-      - role::ocs_agent::install
+      - never
 
   - role: amtega.epel
-    when:
-      - ansible_facts.distribution | lower in ["centos", "redhat"]
     tags:
-      - role::ocs_agent
-      - role::ocs_agent::install
+      - never
 
   - role: amtega.packages
-    packages_os: "{{ ocs_agent_packages_os }}"
     tags:
-      - role::ocs_agent
-      - role::ocs_agent::install
+      - never
 
   - role: amtega.artifact
-    when: false
     tags:
-      - role::ocs_agent
-      - role::ocs_agent::install
+      - never
