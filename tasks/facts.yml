@@ -1,0 +1,19 @@
+---
+# OCS facts Tasks
+
+- block:
+    - name: Check ocsinventory
+      command: ocsinventory-agent --version
+      register: ocs_agent_check_result
+      failed_when: no
+      changed_when: no
+
+    - name: Setup fact with ocsinventory installed version
+      set_fact:
+        ocs_agent_installed_version: >-
+          {{ ocs_agent_check_result.stdout
+             | default("")
+             | regex_replace(".*\((.*)\)", "\1") }}
+  tags:
+    - role::ocs_agent
+    - role::ocs_agent::facts

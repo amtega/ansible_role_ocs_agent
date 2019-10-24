@@ -2,12 +2,6 @@
 # install tasks
 
 - block:
-    - name: Check ocsinventory
-      command: ocsinventory-agent --version
-      register: ocs_agent_check_result
-      failed_when: no
-      changed_when: no
-
     - name: Get ocsinventory agent releases info from official site
       uri:
         url: "{{ ocs_agent_repo_host + ocs_agent_repo_releases }}"
@@ -61,12 +55,7 @@
           include_tasks: cleanup.yml
           tags:
             - role::ocs_agent::cleanup
-      when: ocs_agent_installed_version != ocs_agent_version_to_install
       vars:
-        ocs_agent_installed_version: >-
-          {{ ocs_agent_check_result.stdout
-             | default("")
-             | regex_replace(".*\((.*)\)", "\1") }}
         ocs_agent_build_dir: >-
           /tmp/Ocsinventory-Unix-Agent-{{ ocs_agent_version_to_install }}
   tags:
