@@ -1,27 +1,6 @@
 ---
 # Role tasks
 
-- include_role:
-    name: amtega.check_platform
-  vars:
-    check_platform_distributions:
-      centos: 6
-      fedora: 29
-      rhel: 6
-
-- include_role:
-    name: amtega.proxy_client
-  vars:
-    proxy_client_permanent: no
-
-- include_role:
-    name: amtega.epel
-
-- include_role:
-    name: amtega.packages
-  vars:
-    packages_os: "{{ ocs_agent_packages_os }}"
-
 - name: Gather ocsinventory facts
   include_tasks: facts.yml
   tags:

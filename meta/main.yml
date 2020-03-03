@@ -23,20 +23,21 @@ galaxy_info:
 
 dependencies:
   - role: amtega.check_platform
-    tags:
-      - never
+    vars:
+      check_platform_distributions:
+        centos: 6
+        fedora: 29
+        rhel: 6
 
   - role: amtega.proxy_client
-    tags:
-      - never
+    vars:
+      proxy_client_permanent: no
 
   - role: amtega.epel
-    tags:
-      - never
 
   - role: amtega.packages
-    tags:
-      - never
+    vars:
+      packages_os: "{{ ocs_agent_packages_os }}"
 
   - role: amtega.artifact
     tags:

@@ -2,6 +2,14 @@
 # Configure tasks
 
 - block:
+    - name: Setup ocsinventory log directory
+      file:
+        state: directory
+        path: "{{ ocs_agent_logfile | dirname }}"
+        mode: 0755
+        owner: root
+        group: root
+
     - name: Setup ocsinventory agent config file
       template:
         src: config.j2
@@ -37,9 +45,11 @@
 
     - name: Setup ocsinventory agent cron
       copy:
-        src: "{{ ocs_agent_config_dir }}/cron"
         dest: "/etc/cron.{{ ocs_agent_cron_frequency }}/ocsinventory-agent"
-        remote_src: yes
+        content: |
+          {{ "#!/bin/bash" }}
+
+          /usr/bin/ocsinventory-agent > /dev/null 2>&1
         mode: 0755
   tags:
     - role::ocs_agent
