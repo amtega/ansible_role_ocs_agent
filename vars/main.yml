@@ -48,7 +48,7 @@ ocs_agent_packages_os:
       perl-IO-Zlib: present
       perl-LWP-Protocol-https: present
       perl-Parse-EDID: present
-  rhel:
+  redhat:
     6:
       uuid-perl: present
       perl-Compress-Zlib: present
