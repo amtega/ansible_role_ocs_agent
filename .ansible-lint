@@ -1,0 +1,6 @@
+---
+
+exclude_paths:
+  - meta
+  - tasks/cleanup.yml
+  - tasks/install.yml
