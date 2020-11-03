@@ -1,16 +1,18 @@
 ---
 # Role tasks
 
-- name: Gather ocsinventory facts
-  include_tasks: facts.yml
-  tags:
-    - role::ocs_agent
-    - role::ocs_agent::facts
-
 - block:
+
+    - name: Gather ocsinventory facts
+      include_tasks: facts.yml
+      tags:
+        - role::ocs_agent
+        - role::ocs_agent::facts
+
     - name: Install ocsinventory agent
       include_tasks: install.yml
       when: ocs_agent_installed_version != ocs_agent_version_to_install
+
   environment: "{{ proxy_client_environment }}"
   tags:
     - role::ocs_agent

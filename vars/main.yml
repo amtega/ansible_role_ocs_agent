@@ -67,18 +67,23 @@ ocs_agent_config_dir: /etc/ocsinventory-agent
 ocs_agent_config_path: "{{ ocs_agent_config_dir }}/ocsinventory-agent.cfg"
 ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
 
-# Version to install
+# Version to install and tag to download
 
 ocs_agent_version_to_install: >-
   {{ (lookup('template', 'version.yml.j2') | from_yaml).version }}
 
+ocs_agent_version_to_install_tag: >-
+    {{ (lookup('template', 'tag.yml.j2') | from_yaml).tag }}
+
 # Offical repository settings
 
 ocs_agent_repo_host: https://github.com
+ocs_agent_api_repo_host: https://api.github.com
 ocs_agent_repo_releases: /OCSInventory-NG/UnixAgent/releases
+ocs_agent_api_repo_releases: /repos/OCSInventory-NG/UnixAgent/releases
 ocs_agent_repo_path: >-
-  {{ "/OCSInventory-NG/UnixAgent/releases/download/v"
-     + ocs_agent_version_to_install }}
+  {{ "/OCSInventory-NG/UnixAgent/releases/download/"
+     + ocs_agent_version_to_install_tag }}
 
 # String to search to guess if ocsinventory agent is installed
 

@@ -23,7 +23,7 @@ This is an example playbook:
 Tests are based on [molecule with vagrant virtual machines](https://molecule.readthedocs.io/en/latest/installation.html).
 
 ```shell
-cd amtega.ntp
+cd amtega.ocs_agent
 
 molecule test --all
 ```

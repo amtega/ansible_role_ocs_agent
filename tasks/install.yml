@@ -2,62 +2,53 @@
 # install tasks
 
 - block:
-    - name: Get ocsinventory agent releases info from official site
-      uri:
-        url: "{{ ocs_agent_repo_host + ocs_agent_repo_releases }}"
-        return_content: yes
-      register: ocs_agent_get_releases_result
-      when:
-        - ocs_agent_version is not defined
-        - ocs_agent_artifact is not defined
 
-    - block:
-        - name: Download ocsinventory artifacts
-          include_role:
-            name: amtega.artifact
-          vars:
-            artifact_list:
-              - "{{ ocs_agent_artifact_overriden }}"
-
-        - name: Prepare ocsinventory agent build
-          shell: perl Makefile.PL INSTALLDIRS=vendor
-          args:
-            chdir: "{{ ocs_agent_build_dir }}"
-            warn: no
-
-        - name: Build ocsinventory build
-          command: make
-          args:
-            chdir: "{{ ocs_agent_build_dir }}"
-
-        - name: Install ocsinventory
-          command: make pure_install
-          args:
-            chdir: "{{ ocs_agent_build_dir }}"
-
-        - name: Install ocsinventory agent config directory
-          command: >-
-            rsync --delay-updates -F --compress --perms --owner --group \
-            --recursive --links --update '--out-format=<<CHANGED>>%i %n%L' \
-            {{ ocs_agent_build_dir }}/etc/ocsinventory-agent/
-            {{ ocs_agent_config_dir }}
-          register: ocs_agent_install_config_dir_result
-          changed_when: >-
-            ocs_agent_install_config_dir_result.stdout_lines | length > 0
-
-        - name: Install ocsinventory template cron file
-          copy:
-            src: "{{ ocs_agent_build_dir }}/etc/cron.d/ocsinventory-agent"
-            dest: "{{ ocs_agent_config_dir }}/cron"
-            remote_src: yes
-
-        - name: Cleanup
-          include_tasks: cleanup.yml
-          tags:
-            - role::ocs_agent::cleanup
+    - name: Download ocsinventory artifacts
+      include_role:
+        name: amtega.artifact
       vars:
-        ocs_agent_build_dir: >-
-          /tmp/Ocsinventory-Unix-Agent-{{ ocs_agent_version_to_install }}
+        artifact_list:
+          - "{{ ocs_agent_artifact_overriden }}"
+
+    - name: Prepare ocsinventory agent build
+      shell: perl Makefile.PL INSTALLDIRS=vendor
+      args:
+        chdir: "{{ ocs_agent_build_dir }}"
+        warn: no
+
+    - name: Build ocsinventory build
+      command: make
+      args:
+        chdir: "{{ ocs_agent_build_dir }}"
+
+    - name: Install ocsinventory
+      command: make pure_install
+      args:
+        chdir: "{{ ocs_agent_build_dir }}"
+
+    - name: Install ocsinventory agent config directory
+      command: >-
+        rsync --delay-updates -F --compress --perms --owner --group \
+        --recursive --links --update '--out-format=<<CHANGED>>%i %n%L' \
+        {{ ocs_agent_build_dir }}/etc/ocsinventory-agent/
+        {{ ocs_agent_config_dir }}
+      register: ocs_agent_install_config_dir_result
+      changed_when: >-
+        ocs_agent_install_config_dir_result.stdout_lines | length > 0
+
+    - name: Install ocsinventory template cron file
+      copy:
+        src: "{{ ocs_agent_build_dir }}/etc/cron.d/ocsinventory-agent"
+        dest: "{{ ocs_agent_config_dir }}/cron"
+        remote_src: yes
+
+    - name: Cleanup
+      include_tasks: cleanup.yml
+      tags:
+        - role::ocs_agent::cleanup
+  vars:
+    ocs_agent_build_dir: >-
+      /tmp/Ocsinventory-Unix-Agent-{{ ocs_agent_version_to_install }}
   tags:
     - role::ocs_agent
     - role::ocs_agent::install
