@@ -50,13 +50,6 @@ platforms:
       - molecule_hosts
       - molecule_hosts_fedora
       - molecule_hosts_fedora_31
-  - name: "fedora32-${INSTANCE_UUID:-1}"
-    box: fedora/32-cloud-base
-    memory: 1024
-    groups:
-      - molecule_hosts
-      - molecule_hosts_fedora
-      - molecule_hosts_fedora_32
 provisioner:
   name: ansible
   config_options:
