@@ -73,7 +73,7 @@ ocs_agent_version_to_install: >-
   {{ (lookup('template', 'version.yml.j2') | from_yaml).version }}
 
 ocs_agent_version_to_install_tag: >-
-    {{ (lookup('template', 'tag.yml.j2') | from_yaml).tag }}
+  {{ (lookup('template', 'tag.yml.j2') | from_yaml).tag }}
 
 # Offical repository settings
 
