@@ -1,8 +1,7 @@
 ---
-# install tasks
+# Install tasks
 
 - block:
-
     - name: Download ocsinventory artifacts
       include_role:
         name: amtega.artifact
