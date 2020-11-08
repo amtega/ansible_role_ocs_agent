@@ -1,4 +1,6 @@
-{%- set latest = ocs_agent_get_releases_result.json.0.name.split()
+{%- set latest = (ocs_agent_get_releases_result.json
+                  | rejectattr("name", "search", "\(.*\)")
+                  | list).0.name.split()
                  | last
                  | default("") %}
 {%- if ocs_agent_artifact is defined %}
