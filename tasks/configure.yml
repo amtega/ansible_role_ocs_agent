@@ -14,16 +14,25 @@
       template:
         src: config.j2
         dest: "{{ ocs_agent_config_path }}"
+        owner: root
+        group: root
+        mode: 0640
 
     - name: Setup ocsinventory agent sysconfig file
       template:
         src: sysconfig.j2
         dest: "{{ ocs_agent_syconfig_path }}"
+        owner: root
+        group: root
+        mode: 0644
 
     - name: Configure ocsinventory logrotate
       template:
         src: logrotate.j2
         dest: "{{ ocs_agent_logrotate_path }}"
+        owner: root
+        group: root
+        mode: 0644
 
     - name: Remove obsolete agent cron config
       file:
