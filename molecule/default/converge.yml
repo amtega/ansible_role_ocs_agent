@@ -2,7 +2,5 @@
 - name: Converge
   hosts: molecule_hosts
   become: yes
-  tasks:
-    - name: "Include amtega.ocs_agent"
-      include_role:
-        name: "amtega.ocs_agent"
+  roles:
+    - amtega.ocs_agent

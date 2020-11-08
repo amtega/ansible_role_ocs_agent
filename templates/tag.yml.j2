@@ -1,4 +1,4 @@
-{% if  ocs_agent_get_releases_result.json is defined %}
+{% if ocs_agent_get_releases_result.json is defined %}
 {% for release in ocs_agent_get_releases_result.json %}
 {% if release.name.split() | last == ocs_agent_version_to_install %}
 tag: "{{ release.tag_name }}"
