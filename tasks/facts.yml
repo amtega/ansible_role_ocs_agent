@@ -14,6 +14,16 @@
           {{ ocs_agent_check_result.stdout
              | default("")
              | regex_replace(".*\((.*)\)", "\1") }}
+
+    - name: Get ocsinventory agent releases info from official site
+      uri:
+        url: "{{ ocs_agent_api_repo_host + ocs_agent_api_repo_releases }}"
+        return_content: yes
+        headers:
+          Content-Type: "application/json"
+      register: ocs_agent_get_releases_result
+      changed_when: no
+
   tags:
     - role::ocs_agent
     - role::ocs_agent::facts

@@ -29,13 +29,6 @@ lint: |
   ansible-lint .
   flake8
 platforms:
-  - name: "centos6-${INSTANCE_UUID:-1}"
-    box: centos/6
-    memory: 1024
-    groups:
-      - molecule_hosts
-      - molecule_hosts_centos
-      - molecule_hosts_centos_6
   - name: "centos7-${INSTANCE_UUID:-1}"
     box: centos/7
     memory: 1024
@@ -43,13 +36,6 @@ platforms:
       - molecule_hosts
       - molecule_hosts_centos
       - molecule_hosts_centos_7
-  - name: "fedora29-${INSTANCE_UUID:-1}"
-    box: fedora/29-cloud-base
-    memory: 1024
-    groups:
-      - molecule_hosts
-      - molecule_hosts_fedora
-      - molecule_hosts_fedora_29
   - name: "fedora30-${INSTANCE_UUID:-1}"
     box: fedora/30-cloud-base
     memory: 1024
@@ -57,6 +43,20 @@ platforms:
       - molecule_hosts
       - molecule_hosts_fedora
       - molecule_hosts_fedora_30
+  - name: "fedora31-${INSTANCE_UUID:-1}"
+    box: fedora/31-cloud-base
+    memory: 1024
+    groups:
+      - molecule_hosts
+      - molecule_hosts_fedora
+      - molecule_hosts_fedora_31
+  - name: "fedora32-${INSTANCE_UUID:-1}"
+    box: fedora/32-cloud-base
+    memory: 1024
+    groups:
+      - molecule_hosts
+      - molecule_hosts_fedora
+      - molecule_hosts_fedora_29
 provisioner:
   name: ansible
   config_options:

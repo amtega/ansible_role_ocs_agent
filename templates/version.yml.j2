@@ -1,15 +1,4 @@
-{%- if ocs_agent_get_releases_result.content is defined %}
-{%- set latest = (ocs_agent_get_releases_result.content.split('<div class="release')
-                  | select("search", "label-latest")
-                  | list
-                  | first).splitlines()
-                 | select("search", 'title="v.*"')
-                 | list
-                 | first
-                 | regex_replace('.*title="v(.*)".*', '\\1') %}
-{%- else %}
-{%- set latest = "" -%}
-{%- endif %}
+{%- set latest = ocs_agent_get_releases_result.json.0.name.split() | last | default("") %}
 {%- if ocs_agent_artifact is defined %}
 version: "{{ ocs_agent_artifact.file | regex_replace(".*-([0-9.]+)\.tar.gz", "\\1") }}"
 {%- else %}

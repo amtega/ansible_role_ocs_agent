@@ -12,15 +12,15 @@
       not ocs_agent_check.stdout
       is search("Ocsinventory unified agent for UNIX")
 
-  - name: Check cron file location is correct
+  - name: Check cron file location is correct (Asume role defaults)
     stat:
-      path: "/etc/cron.{{ ocs_agent_cron_frequency }}/ocsinventory-agent"
+      path: "/etc/cron.daily/ocsinventory-agent"
     register: ocs_agent_cron_check
     changed_when: no
 
-  - name: Check logrotate file location is correct
+  - name: Check logrotate file location is correct (Asume role defaults)
     stat:
-      path: "{{ ocs_agent_logrotate_path }}"
+      path: /etc/logrotate.d/ocsinventory-agent
     register: ocs_agent_logrotate_check
     changed_when: no
 

@@ -11,12 +11,12 @@ galaxy_info:
   platforms:
     - name: EL
       versions:
-        - 6
         - 7
     - name: Fedora
       versions:
-        - 29
         - 30
+        - 31
+        - 32
   galaxy_tags:
     - ocsinventory
     - client
@@ -25,9 +25,9 @@ dependencies:
   - role: amtega.check_platform
     vars:
       check_platform_distributions:
-        centos: 6
-        fedora: 29
-        redhat: 6
+        centos: 7
+        fedora: 30
+        redhat: 7
 
   - role: amtega.proxy_client
     vars:
