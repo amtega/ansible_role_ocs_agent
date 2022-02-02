@@ -2,5 +2,5 @@
 
 exclude_paths:
   - meta
-  - tasks/cleanup.yml
-  - tasks/install.yml
+warn_list:
+  - command-instead-of-module
