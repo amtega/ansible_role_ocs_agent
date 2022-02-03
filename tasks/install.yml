@@ -50,6 +50,7 @@
         chdir: "{{ ocs_agent_build_dir }}"
 
     - name: Install ocsinventory agent config directory
+      # noqa command-instead-of-module
       command: >-
         rsync --delay-updates -F --compress --perms --owner --group \
         --recursive --links --update '--out-format=<<CHANGED>>%i %n%L' \
