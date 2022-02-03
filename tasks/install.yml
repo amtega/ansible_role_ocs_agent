@@ -9,8 +9,32 @@
         artifact_list:
           - "{{ ocs_agent_artifact_overriden }}"
 
+    - name: Enable powertools
+      community.general.ini_file:
+        path: "{{ ocs_agent_powertools_repo_path }}"
+        section: powertools
+        option: enabled
+        value: "1"
+        mode: "0644"
+      when:
+        - ansible_distribution in [ "CentOS", "EL" ]
+        - ansible_distribution_major_version >= "8"
+
+    - name: Yum update cache
+      ansible.builtin.yum:
+        update_cache: yes
+      when:
+        - ansible_distribution in [ "CentOS", "EL" ]
+        - ansible_distribution_major_version >= "8"
+
+    - name: Install needed software
+      include_role:
+        name: amtega.packages
+      vars:
+        packages_os: "{{ ocs_agent_packages_os }}"
+
     - name: Prepare ocsinventory agent build
-      shell: perl Makefile.PL INSTALLDIRS=vendor
+      command: perl Makefile.PL INSTALLDIRS=vendor
       args:
         chdir: "{{ ocs_agent_build_dir }}"
         warn: no
@@ -40,6 +64,7 @@
         src: "{{ ocs_agent_build_dir }}/etc/cron.d/ocsinventory-agent"
         dest: "{{ ocs_agent_config_dir }}/cron"
         remote_src: yes
+        mode: 0644
 
     - name: Cleanup
       include_tasks: cleanup.yml

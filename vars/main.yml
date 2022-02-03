@@ -22,7 +22,6 @@ ocs_agent_packages_os:
       perl-Net-SSLeay: present
       perl-Nmap-Parser: present
       perl-Proc-Daemon: present
-      perl-Proc-PID-File: present
       perl-XML-Simple: present
       perl-Ocsinventory-Agent: absent
       ocsinventory-agent: absent
@@ -33,6 +32,7 @@ ocs_agent_packages_os:
       uuid-perl: present
       perl-Compress-Zlib: present
       perl-MD5: present
+      perl-Proc-PID-File: present
     7:
       perl-Data-UUID: present
       perl-Digest-MD5: present
@@ -40,6 +40,7 @@ ocs_agent_packages_os:
       perl-IO-Zlib: present
       perl-LWP-Protocol-https: present
       perl-Parse-EDID: present
+      perl-Proc-PID-File: present
   fedora:
     all:
       perl-Data-UUID: present
@@ -48,6 +49,7 @@ ocs_agent_packages_os:
       perl-IO-Zlib: present
       perl-LWP-Protocol-https: present
       perl-Parse-EDID: present
+      perl-Proc-PID-File: present
   redhat:
     6:
       uuid-perl: present
