@@ -9,23 +9,19 @@
         artifact_list:
           - "{{ ocs_agent_artifact_overriden }}"
 
-    - name: Enable powertools
-      community.general.ini_file:
-        path: "{{ ocs_agent_powertools_repo_path }}"
-        section: powertools
-        option: enabled
-        value: "1"
-        mode: "0644"
-      when:
-        - ansible_distribution in [ "CentOS", "EL" ]
-        - ansible_distribution_major_version >= "8"
+    - block:
+        - name: Enable powertools
+          community.general.ini_file:
+            path: "{{ ocs_agent_powertools_repo_path }}"
+            section: powertools
+            option: enabled
+            value: "1"
+            mode: "0644"
 
-    - name: Yum update cache
-      ansible.builtin.yum:
-        update_cache: yes
-      when:
-        - ansible_distribution in [ "CentOS", "EL" ]
-        - ansible_distribution_major_version >= "8"
+        - name: Yum update cache
+          ansible.builtin.yum:
+            update_cache: yes
+      when: ansible_facts.distribution_major_version is version("8", ">=")
 
     - name: Install needed software
       include_role:
