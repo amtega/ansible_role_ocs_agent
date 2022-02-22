@@ -10,9 +10,18 @@
           - "{{ ocs_agent_artifact_overriden }}"
 
     - block:
+        - name: Search powertools repo config file
+          find:
+            paths: /etc/yum.repos.d
+            file_type: file
+            patterns: "*.repo"
+            contains: ".*\\[powertools\\].*"
+          register: ocs_agent_search_powertools_result
+
         - name: Enable powertools
           community.general.ini_file:
-            path: "{{ ocs_agent_powertools_repo_path }}"
+            path: >-
+              {{ ocs_agent_search_powertools_result.files.0.path }}
             section: powertools
             option: enabled
             value: "1"

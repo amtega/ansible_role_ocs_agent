@@ -60,6 +60,3 @@ ocs_agent_cron_frequency: daily
 # so they are not mandatory
 
 # ocs_agent_artifact:
-
-# PowerTools repository path. Needed to resolv perl modules dependencies
-ocs_agent_powertools_repo_path: /etc/yum.repos.d/CentOS-Stream-PowerTools.repo
