@@ -2,13 +2,12 @@
 # Install tasks
 
 - block:
-    - name: Download ocsinventory artifacts
+    - name: Install needed software
       include_role:
-        name: amtega.artifact
+        name: amtega.packages
       vars:
-        artifact_list:
-          - "{{ ocs_agent_artifact_overriden }}"
-
+        packages_os: "{{ ocs_agent_packages_os }}"
+        
     - block:
         - name: Search powertools repo config file
           find:
@@ -30,55 +29,16 @@
         - name: Yum update cache
           ansible.builtin.yum:
             update_cache: yes
-      when: ansible_facts.distribution_major_version is version("8", ">=")
+      when:
+        - ansible_facts.distribution_major_version is version("8", ">=")
+        - ansible_facts.distribution | lower != "fedora"
 
-    - name: Install needed software
-      include_role:
-        name: amtega.packages
-      vars:
-        packages_os: "{{ ocs_agent_packages_os }}"
+    - name: install ocs agent
+      package:
+        name: "ocsinventory-agent"
+        state: present
+      register: ocs_agent_install_result
 
-    - name: Prepare ocsinventory agent build
-      command: perl Makefile.PL INSTALLDIRS=vendor
-      args:
-        chdir: "{{ ocs_agent_build_dir }}"
-        warn: no
-
-    - name: Build ocsinventory build
-      command: make
-      args:
-        chdir: "{{ ocs_agent_build_dir }}"
-
-    - name: Install ocsinventory
-      command: make pure_install
-      args:
-        chdir: "{{ ocs_agent_build_dir }}"
-
-    - name: Install ocsinventory agent config directory
-      # noqa command-instead-of-module
-      command: >-
-        rsync --delay-updates -F --compress --perms --owner --group \
-        --recursive --links --update '--out-format=<<CHANGED>>%i %n%L' \
-        {{ ocs_agent_build_dir }}/etc/ocsinventory-agent/
-        {{ ocs_agent_config_dir }}
-      register: ocs_agent_install_config_dir_result
-      changed_when: >-
-        ocs_agent_install_config_dir_result.stdout_lines | length > 0
-
-    - name: Install ocsinventory template cron file
-      copy:
-        src: "{{ ocs_agent_build_dir }}/etc/cron.d/ocsinventory-agent"
-        dest: "{{ ocs_agent_config_dir }}/cron"
-        remote_src: yes
-        mode: 0644
-
-    - name: Cleanup
-      include_tasks: cleanup.yml
-      tags:
-        - role::ocs_agent::cleanup
-  vars:
-    ocs_agent_build_dir: >-
-      /tmp/Ocsinventory-Unix-Agent-{{ ocs_agent_version_to_install }}
   tags:
     - role::ocs_agent
     - role::ocs_agent::install

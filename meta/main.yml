@@ -35,11 +35,3 @@ dependencies:
       proxy_client_permanent: no
 
   - role: amtega.epel
-
-  - role: amtega.packages
-    tags:
-      - never
-
-  - role: amtega.artifact
-    tags:
-      - never
