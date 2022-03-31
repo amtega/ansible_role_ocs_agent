@@ -10,6 +10,14 @@
         owner: root
         group: root
 
+    - name: Setup ocsinventory config directory
+      file:
+        state: directory
+        path: "{{ ocs_agent_config_dir }}"
+        mode: 0755
+        owner: root
+        group: root
+
     - name: Setup ocsinventory agent config file
       template:
         src: config.j2
