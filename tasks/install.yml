@@ -7,7 +7,7 @@
         name: amtega.packages
       vars:
         packages_os: "{{ ocs_agent_packages_os }}"
-        
+
     - block:
         - name: Search powertools repo config file
           find:
@@ -32,6 +32,16 @@
       when:
         - ansible_facts.distribution_major_version is version("8", ">=")
         - ansible_facts.distribution | lower != "fedora"
+        - ansible_facts.distribution | lower != "RedHat"
+
+    - block:
+        - name: Enable codeready-builder repository
+          rhsm_repository:
+            name: codeready-builder-for-rhel-8-x86_64-rpms
+            state: enabled
+      when:
+        - ansible_facts.distribution_major_version is version("8", ">=")
+        - ansible_facts.distribution | lower == "RedHat"
 
     - name: install ocs agent
       package:
