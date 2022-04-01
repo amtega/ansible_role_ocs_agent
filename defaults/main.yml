@@ -1,11 +1,6 @@
 ---
 # Role default lower priority variables
 
-# OCS Agent version. If not defined the role will take the last version
-# available in official repository
-
-#ocs_agent_version:
-
 # OCS Server
 
 ocs_agent_server: ocsinventory-server.acme.org

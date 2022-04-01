@@ -1,6 +1,5 @@
 ---
 # Role variables
-
 # Packages to install
 
 ocs_agent_packages_os:
@@ -9,91 +8,11 @@ ocs_agent_packages_os:
       crontabs: present
       dmidecode: present
       ipmitool: present
-      make: present
-      pciutils: present
-      perl-libwww-perl: present
-      perl-Crypt-SSLeay: present
-      perl-IO-Socket-SSL: present
-      perl-Module-Install: present
-      perl-Net-CUPS: present
-      perl-Net-IP: present
-      perl-Net-Netmask: present
-      perl-Net-SNMP: present
-      perl-Net-SSLeay: present
-      perl-Nmap-Parser: present
-      perl-Proc-Daemon: present
-      perl-XML-Simple: present
-      perl-Ocsinventory-Agent: absent
-      ocsinventory-agent: absent
-      rsync: present
-      sshpass: present
-    6:
-      uuid-perl: present
-      perl-Compress-Zlib: present
-      perl-MD5: present
-      perl-Proc-PID-File: present
-    7:
-      perl-Data-UUID: present
-      perl-Digest-MD5: present
-      perl-IO-Compress: present
-      perl-IO-Zlib: present
-      perl-LWP-Protocol-https: present
-      perl-Parse-EDID: present
-      perl-Proc-PID-File: present
-  fedora:
-    all:
-      perl-Data-UUID: present
-      perl-Digest-MD5: present
-      perl-IO-Compress: present
-      perl-IO-Zlib: present
-      perl-LWP-Protocol-https: present
-      perl-Parse-EDID: present
-      perl-Proc-PID-File: present
-
 # Config paths
 
 ocs_agent_config_dir: /etc/ocsinventory-agent
 ocs_agent_config_path: "{{ ocs_agent_config_dir }}/ocsinventory-agent.cfg"
 ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
 
-# Version to install and tag to download
-
-ocs_agent_version_to_install: >-
-  {{ (lookup('template', 'version.yml.j2') | from_yaml).version }}
-
-ocs_agent_version_to_install_tag: >-
-  {{ (lookup('template', 'tag.yml.j2') | from_yaml).tag }}
-
-# Offical repository settings
-
-ocs_agent_repo_host: https://github.com
-ocs_agent_api_repo_host: https://api.github.com
-ocs_agent_repo_releases: /OCSInventory-NG/UnixAgent/releases
-ocs_agent_api_repo_releases: /repos/OCSInventory-NG/UnixAgent/releases
-ocs_agent_repo_path: >-
-  {{ "/OCSInventory-NG/UnixAgent/releases/download/"
-     + ocs_agent_version_to_install_tag }}
-
 # String to search to guess if ocsinventory agent is installed
-
 ocs_agent_installed_string: Ocsinventory unified agent for UNIX
-
-# Artifact variables
-
-ocs_agent_default_artifact:
-  type: https
-  host: "{{ ocs_agent_repo_host }}"
-  path: "{{ ocs_agent_repo_path }}"
-  file: >-
-    Ocsinventory-Unix-Agent-{{ ocs_agent_version_to_install }}.tar.gz
-  dest: /tmp
-  no_log: no
-
-ocs_agent_artifact_overrides:
-  id: ocsinventory_agent
-  unarchive: yes
-
-ocs_agent_artifact_overriden: >-
-  {{ ocs_agent_artifact
-     | default(ocs_agent_default_artifact)
-     | combine(ocs_agent_artifact_overrides) }}
