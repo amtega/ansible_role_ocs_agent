@@ -39,19 +39,3 @@ ocs_agent_logrotate:
 # OCS agent cron frequency. Can be hourly, daily, weekly or monthly
 
 ocs_agent_cron_frequency: daily
-
-# Artifact download config
-#
-# The role will try to identify the OCS inventory agent artifact to download
-# from the the official site.
-#
-# If you want to download the artifact from another repository yo need to
-# configure the `ocs_agent_artifact` variable to point to a local/public
-# repository that contains the required artifact
-#
-# Take a look to `amtega.artifact` role documentation to known about supported
-# types of artifacts, their specific settings and how to configure a proxy if
-# necessary. The attributes `id`, `unarchive` of the artifact will be overriden,
-# so they are not mandatory
-
-# ocs_agent_artifact:

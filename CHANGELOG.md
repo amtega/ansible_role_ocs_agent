@@ -6,8 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- Refactored to install from repository
-- Add rh subscription manager support 
+- Refactored to install from epel repository. Related to ansible/playbooks/linux#78
 
 ## [1.4.0] - 2022-02-22
 ### Changed

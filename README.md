@@ -20,7 +20,7 @@ This is an example playbook:
 
 ## Testing
 
-Tests are based on [molecule with vagrant virtual machines](https://molecule.readthedocs.io/en/latest/installation.html).
+Tests are based on [molecule with podman virtual machines](https://molecule.readthedocs.io/en/latest/installation.html).
 
 ```shell
 cd amtega.ocs_agent
