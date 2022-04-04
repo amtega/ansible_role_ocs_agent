@@ -2,53 +2,44 @@
 # Install tasks
 
 - block:
-    - name: Install needed software
-      include_role:
-        name: amtega.packages
-      vars:
-        packages_os: "{{ ocs_agent_packages_os }}"
-
     - block:
-        - name: Search powertools repo config file
+        - name: Search powertools/codeready-builder repo config file
           find:
             paths: /etc/yum.repos.d
             file_type: file
             patterns: "*.repo"
-            contains: ".*\\[powertools\\].*"
-          register: ocs_agent_search_powertools_result
+            contains: ".*\\[{{ ocs_agent_ptcrb_repo_section }}\\].*"
+          register: ocs_agent_search_ptcrb_result
 
-        - name: Enable powertools
+        - name: Enable powertools/codeready-builder repo
           community.general.ini_file:
             path: >-
-              {{ ocs_agent_search_powertools_result.files.0.path }}
-            section: powertools
+              {{ ocs_agent_search_ptcrb_result.files.0.path }}
+            section: "{{ ocs_agent_ptcrb_repo_section }}"
             option: enabled
             value: "1"
+            no_extra_spaces: yes
             mode: "0644"
 
-        - name: Yum update cache
+        - name: Update package manager cache
           ansible.builtin.yum:
             update_cache: yes
       when:
         - ansible_facts.distribution_major_version is version("8", ">=")
         - ansible_facts.distribution | lower != "fedora"
-        - ansible_facts.distribution | lower != "RedHat"
+      vars:
+        ocs_agent_ptcrb_repo_section: >-
+          {{ (ansible_facts.distribution | lower == "redhat")
+             | ternary("codeready-builder-for-rhel-8-"
+                       + ansible_facts.architecture
+                       + "-rpms",
+                       "powertools") }}
 
-    - block:
-        - name: Enable codeready-builder repository
-          rhsm_repository:
-            name: codeready-builder-for-rhel-8-x86_64-rpms
-            state: enabled
-      when:
-        - ansible_facts.distribution_major_version is version("8", ">=")
-        - ansible_facts.distribution | lower == "RedHat"
-
-    - name: install ocs agent
-      package:
-        name: "ocsinventory-agent"
-        state: present
-      register: ocs_agent_install_result
-
+    - name: Setup packages
+      include_role:
+        name: amtega.packages
+      vars:
+        packages_os: "{{ ocs_agent_packages_os }}"
   tags:
     - role::ocs_agent
     - role::ocs_agent::install
