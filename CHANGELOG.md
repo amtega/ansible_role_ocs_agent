@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2022-04-21
+### Fixed
+- Fixed config dir and binary routes. Related to ansible/roles/amtega.vmware_provisioner#53
+
 ## [1.5.0] - 2022-04-04
 - Refactored to install from epel repository. Related to ansible/playbooks/linux#78
 

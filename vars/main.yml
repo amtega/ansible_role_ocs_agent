@@ -13,6 +13,6 @@ ocs_agent_packages_os:
 
 # Config paths
 
-ocs_agent_config_dir: /etc/ocsinventory-agent
+ocs_agent_config_dir: /etc/ocsinventory
 ocs_agent_config_path: "{{ ocs_agent_config_dir }}/ocsinventory-agent.cfg"
 ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
