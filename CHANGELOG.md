@@ -6,10 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.5.1] - 2022-04-22
+## [1.5.2] - 2022-04-22
 ### Added
 - Manage ipmitool dependency. Uninstall by default. Related to ansible/playbooks/linux#85
 
+## [1.5.1] - 2022-04-22
 ### Fixed
 - Fixed config dir and binary routes. Related to ansible/roles/amtega.vmware_provisioner#53
 
