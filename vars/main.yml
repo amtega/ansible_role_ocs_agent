@@ -8,7 +8,6 @@ ocs_agent_packages_os:
     all:
       crontabs: present
       dmidecode: present
-      ipmitool: present
       ocsinventory-agent: present
 
 # Config paths

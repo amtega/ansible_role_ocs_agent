@@ -39,3 +39,7 @@ ocs_agent_logrotate:
 # OCS agent cron frequency. Can be hourly, daily, weekly or monthly
 
 ocs_agent_cron_frequency: daily
+
+# Indicate if ipmi dependency must be installed. Must be present or absent.
+
+ocs_agent_ipmitool_dependency: absent
