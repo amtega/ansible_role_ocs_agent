@@ -15,3 +15,9 @@ ocs_agent_packages_os:
 ocs_agent_config_dir: /etc/ocsinventory
 ocs_agent_config_path: "{{ ocs_agent_config_dir }}/ocsinventory-agent.cfg"
 ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
+
+# Execution command
+ocs_agent_exec_command: >-
+  {{ (ocs_agent_force_exec)
+     | ternary("/usr/sbin/ocsinventory-agent --force",
+               "/usr/sbin/ocsinventory-agent") }}
