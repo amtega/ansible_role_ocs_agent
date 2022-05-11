@@ -66,8 +66,15 @@
         content: |
           {{ "#!/bin/bash" }}
 
-           /usr/sbin/ocsinventory-agent > /dev/null 2>&1
+          {{ ocs_agent_exec_command }} > /dev/null 2>&1
         mode: 0755
+      register: ocs_install_cron_create_result
+
+    - name: First execution
+      command: "{{ ocs_agent_exec_command }}"
+      when:
+        - ocs_install_cron_create_result is changed
+        - ocs_agent_exec_on_provision
   tags:
     - role::ocs_agent
     - role::ocs_agent::configure

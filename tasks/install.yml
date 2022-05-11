@@ -45,6 +45,7 @@
       package:
         name: ipmitool
         state: "{{ ocs_agent_ipmitool_dependency }}"
+
   tags:
     - role::ocs_agent
     - role::ocs_agent::install
