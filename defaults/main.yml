@@ -40,6 +40,14 @@ ocs_agent_logrotate:
 
 ocs_agent_cron_frequency: daily
 
+# OCS agent --force option. It is used when the version of the server is lower
+# than that of the client.
+
+ocs_agent_force_exec: yes
+
+# Ocs agent execute in provision
+ocs_agent_exec_on_provision: no
+
 # Indicate if ipmi dependency must be installed. Must be present or absent.
 
 ocs_agent_ipmitool_dependency: absent

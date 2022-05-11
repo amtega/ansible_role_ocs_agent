@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2022-04-22
+### Added
+- Include --force option to ocs client install. Related to ansible/playbooks/linux#92
+
 ## [1.6.0] - 2022-04-22
 ### Added
 - Manage ipmitool dependency. Uninstall by default. Related to ansible/playbooks/linux#85
