@@ -70,7 +70,7 @@
         mode: 0755
       register: ocs_install_cron_create_result
 
-    - name: First execution
+    - name: Execute ocsinventory agent for the first time
       command: "{{ ocs_agent_exec_command }}"
       when:
         - ocs_install_cron_create_result is changed
