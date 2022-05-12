@@ -46,6 +46,7 @@ ocs_agent_cron_frequency: daily
 ocs_agent_force_exec: yes
 
 # Ocs agent execute in provision
+
 ocs_agent_exec_on_provision: no
 
 # Indicate if ipmi dependency must be installed. Must be present or absent.
