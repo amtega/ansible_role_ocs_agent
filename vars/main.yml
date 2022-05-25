@@ -19,6 +19,6 @@ ocs_agent_syconfig_path: /etc/sysconfig/ocsinventory-agent
 # Execution command
 
 ocs_agent_exec_command: >-
-  {{ (ocs_agent_force_exec)
+  {{ (ocs_agent_force_exec | bool)
      | ternary("/usr/sbin/ocsinventory-agent --force",
                "/usr/sbin/ocsinventory-agent") }}
