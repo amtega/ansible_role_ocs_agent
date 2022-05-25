@@ -72,6 +72,10 @@
 
     - name: Execute ocsinventory agent for the first time
       command: "{{ ocs_agent_exec_command }}"
+      register: ocs_agent_exec_result
+      failed_when: >-
+        (ocs_agent_force_exec | bool)
+           | ternary(false, ocs_agent_exec_result.rc != 0)
       when:
         - ocs_install_cron_create_result is changed
         - ocs_agent_exec_on_provision
