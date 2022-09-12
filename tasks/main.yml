@@ -1,5 +1,4 @@
 ---
-# Role tasks
 
 - name: Install ocsinventory agent
   include_tasks: install.yml
