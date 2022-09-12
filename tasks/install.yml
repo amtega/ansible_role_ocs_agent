@@ -1,10 +1,11 @@
 ---
-# Install tasks
 
-- block:
-    - block:
+- name: Install ocsinventory
+  block:
+    - name: Install ocsinventory from powertools
+      block:
         - name: Search powertools/codeready-builder repo config file
-          find:
+          ansible.builtin.find:
             paths: /etc/yum.repos.d
             file_type: file
             patterns: "*.repo"
@@ -36,13 +37,13 @@
                        "powertools") }}
 
     - name: Setup packages
-      include_role:
+      ansible.builtin.include_role:
         name: amtega.packages
       vars:
         packages_os: "{{ ocs_agent_packages_os }}"
 
     - name: Manage ipmi dependency
-      package:
+      ansible.builtin.package:
         name: ipmitool
         state: "{{ ocs_agent_ipmitool_dependency }}"
   tags:

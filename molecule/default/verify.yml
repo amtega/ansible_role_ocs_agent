@@ -5,7 +5,7 @@
   hosts: molecule_hosts
   tasks:
     - name: Check ocsinventory agent install
-      command: ocsinventory-agent --version
+      ansible.builtin.command: ocsinventory-agent --version
       register: ocs_agent_check
       changed_when: no
       failed_when: >-
@@ -13,19 +13,19 @@
         is search("Ocsinventory unified agent for UNIX")
 
     - name: Check cron file location is correct (Asume role defaults)
-      stat:
+      ansible.builtin.stat:
         path: "/etc/cron.daily/ocsinventory-agent"
       register: ocs_agent_cron_check
       changed_when: no
 
     - name: Check logrotate file location is correct (Asume role defaults)
-      stat:
+      ansible.builtin.stat:
         path: /etc/logrotate.d/ocsinventory-agent
       register: ocs_agent_logrotate_check
       changed_when: no
 
     - name: Check install
-      assert:
+      ansible.builtin.assert:
         that:
           - ocs_agent_cron_check.stat.exists
           - ocs_agent_logrotate_check.stat.exists

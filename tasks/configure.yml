@@ -1,9 +1,9 @@
 ---
-# Configure tasks
 
-- block:
+- name: Configure ocsinventory
+  block:
     - name: Setup ocsinventory log directory
-      file:
+      ansible.builtin.file:
         state: directory
         path: "{{ ocs_agent_logfile | dirname }}"
         mode: 0755
@@ -11,7 +11,7 @@
         group: root
 
     - name: Setup ocsinventory config directory
-      file:
+      ansible.builtin.file:
         state: directory
         path: "{{ ocs_agent_config_dir }}"
         mode: 0755
@@ -19,7 +19,7 @@
         group: root
 
     - name: Setup ocsinventory agent config file
-      template:
+      ansible.builtin.template:
         src: config.j2
         dest: "{{ ocs_agent_config_path }}"
         owner: root
@@ -27,7 +27,7 @@
         mode: 0640
 
     - name: Setup ocsinventory agent sysconfig file
-      template:
+      ansible.builtin.template:
         src: sysconfig.j2
         dest: "{{ ocs_agent_syconfig_path }}"
         owner: root
@@ -35,7 +35,7 @@
         mode: 0644
 
     - name: Configure ocsinventory logrotate
-      template:
+      ansible.builtin.template:
         src: logrotate.j2
         dest: "{{ ocs_agent_logrotate_path }}"
         owner: root
@@ -43,7 +43,7 @@
         mode: 0644
 
     - name: Remove obsolete agent cron config
-      file:
+      ansible.builtin.file:
         path: "{{ ocs_agent_cron_file }}"
         state: absent
       loop: >-
@@ -61,7 +61,7 @@
           - /etc/cron.montly/ocsinventory-agent
 
     - name: Setup ocsinventory agent cron
-      copy:
+      ansible.builtin.copy:
         dest: "/etc/cron.{{ ocs_agent_cron_frequency }}/ocsinventory-agent"
         content: |
           {{ "#!/bin/bash" }}
@@ -71,7 +71,7 @@
       register: ocs_install_cron_create_result
 
     - name: Execute ocsinventory agent for the first time
-      command: "{{ ocs_agent_exec_command }}"
+      ansible.builtin.command: "{{ ocs_agent_exec_ansible.builtin.command }}"
       register: ocs_agent_exec_result
       failed_when: >-
         (ocs_agent_force_exec | bool)
